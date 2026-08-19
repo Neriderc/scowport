@@ -1,5 +1,0 @@
-controllers:
-    resource: '../src/Controller/'
-    type: attribute
-    defaults:
-        _format: json
