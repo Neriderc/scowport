@@ -10,75 +10,15 @@ echo "GROUP: ${GID}"
 # s6-supervise <service name>: fatal: unable to mkfifodir event: Permission denied
 rm -rf "$(find /etc/s6.d -name 'event')"
 
-crontab -r
-echo "* * * * * php /zusam/api/bin/console zusam:cron > /dev/stdout" | crontab -
-
-DATABASE_URL="sqlite:///%kernel.project_dir%/../data/${DATABASE_NAME}"
-
-if [ -f /zusam/config ]; then
-  sed -i -e "s|<SECRET>|$(openssl rand -base64 48)|g" \
-    -e "s|<ALLOW_EMAIL>|${ALLOW_EMAIL}|g" \
-    -e "s|<ALLOW_IMAGE_UPLOAD>|${ALLOW_IMAGE_UPLOAD}|g" \
-    -e "s|<ALLOW_MESSAGE_REACTIONS>|${ALLOW_MESSAGE_REACTIONS}|g"\
-    -e "s|<ALLOW_PUBLIC_LINKS>|${ALLOW_PUBLIC_LINKS}|g"\
-    -e "s|<ALLOW_VIDEO_UPLOAD>|${ALLOW_VIDEO_UPLOAD}|g" \
-    -e "s|<DATABASE_URL>|${DATABASE_URL}|g" \
-    -e "s|<DOMAIN>|${DOMAIN}|g" \
-    -e "s|<LANG>|${LANG}|g" \
-    -e "s|<MAILER_DSN>|${MAILER_DSN}|g" \
-    /zusam/config
-  # $APP_ENV doesn't have a value by default
-  if [ -n "${APP_ENV}" ]; then
-    sed -i -e "s|<APP_ENV>|${APP_ENV}|g" /zusam/config
-  fi
-fi
-
-if ! [ -f /zusam/data/config ]; then
-  cp /zusam/config /zusam/data/config
-fi
-
-if ! [ -L /zusam/public/files ]; then
-  ln -s /zusam/data/files /zusam/public/files
-fi
-
-# Install backend dependencies
-COMPOSER_ALLOW_SUPERUSER=1 /usr/bin/php /zusam/api/bin/composer install -d /zusam/api --prefer-dist --no-interaction
-
-# Get actual database path from Symfony config (environment-aware)
-# Output format: "url: 'sqlite:////path/to/database.db'"
-get_db_path() {
-  /zusam/api/bin/console debug:config doctrine dbal.url 2>/dev/null \
-    | grep "url:" \
-    | sed "s/.*sqlite:\/\/\///" \
-    | sed "s/'$//"
-}
-
-DATABASE_PATH=$(get_db_path)
-echo "Resolved DATABASE_PATH: ${DATABASE_PATH}"
-
-# Ensure parent directory exists
-mkdir -p "$(dirname "${DATABASE_PATH}")"
-
-# Initialize database if none is present (use -s to check size > 0, as composer may create empty file)
-if ! [ -s "${DATABASE_PATH}" ]; then
-  INIT_USER_VALUE=${INIT_USER:-zusam}
-  INIT_GROUP_VALUE=${INIT_GROUP:-zusam}
-  INIT_PASSWORD_VALUE=${INIT_PASSWORD:-zusam}
-  /zusam/api/bin/console zusam:init "${INIT_USER_VALUE}" "${INIT_GROUP_VALUE}" "${INIT_PASSWORD_VALUE}"
-else
-  /zusam/api/bin/console doctrine:migrations:migrate --no-interaction --allow-no-migration -vv
-fi
 
 if [ -n "${SUBPATH}" ]; then
   ln -sfn /etc/nginx/nginx-subpath.conf /etc/nginx/nginx.conf
   sed -i -e "s|@SUBPATH@|${SUBPATH}|g" /etc/nginx/nginx.conf
-  sed -i -e "s|href=\"|href=\"${SUBPATH}|g" /zusam/public/index.html
-  sed -i -e "s|src=\"|src=\"${SUBPATH}|g" /zusam/public/index.html
+  sed -i -e "s|href=\"|href=\"${SUBPATH}|g" /scowport/public/index.html
+  sed -i -e "s|src=\"|src=\"${SUBPATH}|g" /scowport/public/index.html
 else
   ln -sfn /etc/nginx/nginx-root.conf /etc/nginx/nginx.conf
 fi
 
-mkdir -p /zusam/api/var/log /zusam/api/var/cache
-
-chown -R "$UID:$GID" /zusam /etc/s6.d /etc/nginx /etc/php85 /var/lib/nginx /var/log /run/nginx
+chown -R "$UID:$GID" /scowport /etc/s6.d /etc/nginx /var/lib/nginx /var/log /run/nginx
 su-exec "$UID:$GID" /usr/bin/s6-svscan /etc/s6.d

@@ -1,0 +1,24 @@
+services:
+  zusam:
+    ports:
+      - '8101:8080'
+    container_name: zusam
+    environment:
+      - INIT_USER=zusam
+      - INIT_PASSWORD=zusam
+      - DATABASE_NAME=data.db
+      - INIT_GROUP=Home
+      - LANG=en_US
+      - DOMAIN=localhost
+      - APP_ENV=dev
+    image: zusam
+
+  scowport:
+    ports:
+      - '8102:8080'
+    container_name: scowport
+    environment:
+      - LANG=en_US
+      - DOMAIN=localhost
+      - APP_ENV=dev
+    image: scowport

@@ -1,8 +1,8 @@
-RUN set -xe \\
-    && addgroup -g $GID zusam \\
-    && adduser -D -G zusam -u $UID zusam \\
-    && mkdir -p /run/nginx /zusam/data /var/tmp/nginx /var/lib/nginx \\
-    && apk add --no-cache --virtual .build-deps tar ca-certificates wget unzip \\
-    && rm -rf /zusam/data/data.db \\
-    && apk del .build-deps \\
-    && chmod -R 755 /usr/local/bin /etc/s6.d /var/lib/nginx /zusam/public /var/tmp/nginx
+RUN set -xe
+RUN addgroup -g $GID scowport
+RUN adduser -D -G scowport -u $UID scowport
+    
+RUN mkdir -p /run/nginx /scowport/data /var/tmp/nginx /var/lib/nginx \\
+    && apk add --no-cache --virtual .build-deps tar ca-certificates wget unzip
+RUN apk del .build-deps \\
+    && chmod -R 755 /usr/local/bin /etc/s6.d /var/lib/nginx /scowport/public /var/tmp/nginx

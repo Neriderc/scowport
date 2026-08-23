@@ -1,13 +1,12 @@
 #include "base.docker"
 #include "env.docker"
 
-WORKDIR /zusam
+WORKDIR /scowport
 
 #include "packages.docker"
-#include "php-packages.docker"
 #include "zusam-files.docker"
 #include "setup.docker"
 
 EXPOSE 8080
-VOLUME /zusam/data
+VOLUME /scowport/data
 CMD ["run.sh"]
