@@ -1,0 +1,34 @@
+#include "base.docker"
+#include "env.docker"
+
+WORKDIR /scowport
+
+#include "packages.docker"
+#include "zusam-files.docker"
+#include "setup.docker"
+
+EXPOSE 8080
+VOLUME /scowport/data
+CMD ["dev_run.sh"]
+
+// The following are additional packages useful during dev
+
+RUN set -xe && apk add --no-cache \\
+    acl \\
+    bash \\
+    ca-certificates \\
+    curl \\
+    git \\
+    gnupg \\
+    make \\
+    nodejs \\
+    npm \\
+    openssh \\
+    openssl \\
+    python3 \\
+    rsync \\
+    sqlite \\
+    sudo \\
+    unzip \\
+    wget \\
+    zip

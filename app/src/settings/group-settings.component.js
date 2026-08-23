@@ -5,6 +5,7 @@ import { $me } from "/src/store/me.js";
 import { useEffect, useState } from "preact/hooks";
 import { useTranslation } from "react-i18next";
 import { useNavigate, useParams } from "react-router-dom";
+import { showConfirm } from "/src/store/confirm-modal.js";
 
 export default function GroupSettings() {
 
@@ -29,19 +30,34 @@ export default function GroupSettings() {
           users => setUsers(users.filter(u => u != null))
         );
       }
-    ).catch(() => null);
+    ).catch((e) => {
+      if ([403, 404].includes(e?.status)) {
+        // We don't have access to group: notify and go to default page
+        alert.add(t("group_access_denied"), "alert-danger");
+        navigate("/");
+        return;
+      }
+    });
     setAlertMessage(t(router.getParam("alert")));
   }, []);
 
-  const resetInviteKey = (event) => {
+  const resetInviteKey = async (event) => {
     event.preventDefault();
-    http
-      .post(`/api/groups/${group.id}/reset-invite-key`, {})
-      .then(res => {
-        if (!res) return;
-        alert.add(t("group_updated"));
-        setInviteKey(res["inviteKey"]);
-      }).catch(() => null);
+    if (await showConfirm({
+      title: t("are_you_sure"),
+      message: t("existing_invite_link_invalidated"),
+      confirmText: t("reset_invitation_link"),
+      cancelText: t("cancel"),
+      variant: "primary"
+    })) {
+      http
+        .post(`/api/groups/${group.id}/reset-invite-key`, {})
+        .then(res => {
+          if (!res) return;
+          alert.add(t("group_updated"));
+          setInviteKey(res["inviteKey"]);
+        }).catch(() => null);
+    }
   };
 
   const updateSettings = (event) => {
@@ -59,30 +75,42 @@ export default function GroupSettings() {
     }).catch(() => null);
   };
 
-  const leaveGroup = (event) => {
+  const leaveGroup = async (event) => {
     event.preventDefault();
-    if (me.data?.default_group == group.id) {
-      let user = {};
-      user.data = { default_group: me.groups[0].id };
-      http.put(`/api/users/${me.id}`, user).then(() => {
-        meService.fetch();
+    if (await showConfirm({
+      title: t("are_you_sure"),
+      message: t("you_will_need_invite"),
+      confirmText: t("quit_group"),
+      cancelText: t("cancel"),
+      variant: "danger"
+    })) {
+      if (group.users.length > 1 || await showConfirm({
+        title: t("are_you_sure"),
+        message: t("you_are_last_group_will_delete"),
+        confirmText: t("delete_group"),
+        cancelText: t("cancel"),
+        variant: "danger"
+      })) {
         leave();
-      }).catch(err => console.warn(err));
-    } else {
-      leave();
+      }
     }
   };
 
-  const leave = () => {
-    http.post(`/api/groups/${group.id}/leave`, {}).then(res => {
+  const leave = async () => {
+    try {
+      const res = await http.post(`/api/groups/${group.id}/leave`, {});
+
       if (!res || !res["entityType"]) {
         alert.add(t("error"), "alert-danger");
-      } else {
-        meService.fetch();
-        alert.add(t("group_left"));
-        navigate("/");
+        return;
       }
-    }).catch(() => null);
+      await meService.update();
+
+      alert.add(t("group_left"));
+      navigate("/");
+    } catch (e) {
+      console.warn(e);
+    }
   };
 
   return (

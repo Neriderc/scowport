@@ -1,6 +1,6 @@
 import _alert from "./alert.js";
 import _api from "./api.js";
-import _http from "./http.js";
+import _http, { NetworkError as _NetworkError } from "./http.js";
 import { lang as _lang, i18n as _i18n } from "./lang.js";
 import _me from "./me.js";
 import _notifications from "./notifications.js";
@@ -8,10 +8,12 @@ import _bookmarks_utils from "./bookmarks_utils.js";
 import _router from "./router.js";
 import _storage from "./storage.js";
 import _util from "./util.js";
+import _withNavigate from "./with-navigate.js";
 
 export const alert = _alert;
 export const api = _api;
 export const http = _http;
+export const NetworkError = _NetworkError;
 export const lang = _lang;
 export const i18n = _i18n;
 export const me = _me;
@@ -20,3 +22,4 @@ export const bookmarks_utils = _bookmarks_utils;
 export const router = _router;
 export const storage = _storage;
 export const util = _util;
+export const withNavigate = _withNavigate;

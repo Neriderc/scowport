@@ -2,6 +2,12 @@ import alert from "./alert.js";
 import storage from "./storage.js";
 import util from "./util.js";
 
+export class NetworkError extends Error {
+  constructor() {
+    super("Network error");
+  }
+}
+
 const http = {
   sendFile: (formData, loadFn, progressFn = null, errorFn = null) => {
     return storage
@@ -30,7 +36,7 @@ const http = {
       })
       .catch(error => alert.add(error, "alert-danger"));
   },
-  get: (url, nocache = false, delay = 0) => {
+  get: (url, nocache = false, delay = 0, signal = null) => {
     return storage
       .get("apiKey")
       .then(x => new Promise(resolve => setTimeout(() => resolve(x), delay)))
@@ -46,17 +52,18 @@ const http = {
         if (nocache) {
           h["X-NOCACHE"] = "nocache";
         }
-        return fetch(url, {
-          method: "GET",
-          headers: new Headers(h)
-        })
-          .then(res => {
-            if (res.ok) return res.json();
-            return Promise.reject({ status: res.status, statusText: res.statusText });
+        const fetchOptions = { method: "GET", headers: new Headers(h) };
+        // https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API/Using_Fetch#canceling_a_request
+        if (signal) fetchOptions.signal = signal;
+        return fetch(url, fetchOptions)
+          .then(async res => {
+            const body = await res.json().catch(() => ({}));
+            if (res.ok) return body;
+            return Promise.reject({ status: res.status, statusText: res.statusText, ...body });
           })
           .catch(err => {
             if (err?.status) return Promise.reject(err);
-            return Promise.reject({ networkError: true });
+            return Promise.reject(new NetworkError());
           });
       });
   },
@@ -93,23 +100,22 @@ const http = {
               : data;
         }
         return fetch(url, fetchOptions)
-          .then(res => {
+          .then(async res => {
+            const body = await res.json().catch(() => ({}));
+
             if (!res.ok) {
-              return Promise.reject({ status: res.status, statusText: res.statusText });
+              throw {
+                status: res.status,
+                statusText: res.statusText,
+                ...body
+              };
             }
-            try {
-              if (method != "DELETE") {
-                return res.json();
-              }
-              return {};
-            } catch (exception) {
-              console.warn(exception.message);
-              return Promise.reject(exception.message);
-            }
+
+            return method !== "DELETE" ? body : {};
           })
           .catch(err => {
             if (err?.status) return Promise.reject(err);
-            return Promise.reject({ networkError: true });
+            return Promise.reject(new NetworkError());
           });
       });
   }

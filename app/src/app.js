@@ -1,5 +1,5 @@
-import { h } from "preact";
-import { http, api, me, notifications, bookmarks_utils, router, storage } from "/src/core";
+import { h, Fragment } from "preact";
+import { http, api, me, notifications, bookmarks_utils, router, storage, NetworkError } from "/src/core";
 import {
   Login,
   Public,
@@ -19,12 +19,16 @@ import {
   useNavigate,
   useLocation,
 } from "react-router-dom";
-import { useEffect } from "preact/hooks";
+import { useEffect, useState } from "preact/hooks";
+import ConfirmModal from "/src/misc/confirm-modal.component.js";
+import i18n from "i18next";
 
 function App() {
 
   const navigate = useNavigate();
   const location = useLocation();
+  const [defaultLang, setDefaultLang] = useState("");
+  const [userLang, setUserLang] = useState("");
 
   const toggleDropdowns = e => {
     if (!e.target.closest(".dropdown")) {
@@ -35,7 +39,7 @@ function App() {
       document
         .querySelectorAll(".dropdown")
         .forEach(n => {
-          if(n != e.target.closest(".dropdown")) {
+          if (n != e.target.closest(".dropdown")) {
             n.classList.remove("active");
           }
         });
@@ -54,8 +58,10 @@ function App() {
   useEffect(() => {
     // this test is here to ensure that 'api' gets loaded before
     // this may come from a transpilation issue with parceljs
-    if(api && typeof api.update === "function") {
-      api.update();
+    if (api && typeof api.update === "function") {
+      api.update().then((res) => {
+        setDefaultLang(res.default_lang);
+      });
     } else {
       console.error("Could not use api.update()");
     }
@@ -69,63 +75,82 @@ function App() {
     };
   });
 
-  me.fetch().then(user => {
-    if (user?._networkError) {
-      // Network is down — don't redirect, stay on current page
-      return;
+  useEffect(() => {
+    const newLang = userLang || defaultLang;
+    if (i18n.language !== newLang) {
+      i18n.changeLanguage(newLang);
     }
+  }, [userLang, defaultLang]);
 
-    if (location.pathname === "/") {
-      let redirect = "/login";
-      if (user) {
-        redirect = "/create-group";
-        if (user?.groups[0]) {
-          const defaultPage = user?.data?.default_page || "default_group";
-          if (defaultPage === "default_group" && user?.data?.default_group) {
-            redirect = `/groups/${user.data.default_group}`;
+  useEffect(() => {
+    try {
+      me.fetch().then(user => {
+        if (user?.data?.lang) {
+          setUserLang(user.data.lang);
+        }
+        if (location.pathname === "/") {
+          let redirect = "/login";
+          if (user) {
+            redirect = "/create-group";
+            if (user?.groups[0]) {
+              const defaultPage = user?.data?.default_page || "default_group";
+              if (defaultPage === "default_group" && user?.data?.default_group) {
+                redirect = `/groups/${user.data.default_group}`;
+              } else {
+                redirect = "/feed";
+              }
+            } else {
+              redirect = "/feed";
+            }
+          }
+          navigate(redirect);
+        }
+
+        if (location.pathname.match(/^\/invitation/)) {
+          if (user) {
+            http.post(`/api/groups/invitation/${router.id}`, {}).catch(() => null).then(res => {
+              if (res) navigate(res.group ? "/groups/" + res.group : "/");
+            });
           } else {
-            redirect = "/feed";
+            navigate(`/signup?inviteKey=${router.id}`);
           }
         }
-      }
-      navigate(redirect);
-    }
 
-    if (location.pathname.match(/^\/invitation/)) {
-      if (user) {
-        http.post(`/api/groups/invitation/${router.id}`, {}).catch(() => null).then(res => {
-          if (res) navigate(res.group ? "/groups/" + res.group : "/");
-        });
-      } else {
-        navigate(`/signup?inviteKey=${router.id}`);
+        if (!router.isOutside() && !user) {
+          navigate("/logout");
+        }
+      });
+    } catch (err) {
+      if (err instanceof NetworkError) {
+        // Network is down — don't redirect, stay on current page
+        return;
       }
     }
-
-    if (!router.isOutside() && !user) {
-      navigate("/login");
-    }
-  });
+  }, [location.pathname]);
 
   return (
-    <Routes>
-      <Route path="/password-reset" element={<PasswordReset />} />
-      <Route path="/public/:token" element={<Public />} />
-      <Route path="/share" element={<Share />} />
-      <Route path="/signup" element={<Signup />} />
-      <Route path="/stop-notification-emails/:userId/:token" element={<StopNotificationEmails />} />
-      <Route path="/login" element={<Login />} />
-      <Route path="/logout" element={<Logout />} />
-      <Route path="/:type/:id/settings" element={<Settings />} />
-      <Route path="/bookmarks" element={<BookmarkBoard />} />
-      <Route path="/create-group" element={<CreateGroup />} />
-      <Route path="/groups/:id" element={<GroupBoard />} />
-      <Route path="/groups/:id/random" element={<RandomMessage />} />
-      <Route path="/groups/:id/search" element={<GroupSearchWrapper />} />
-      <Route path="/groups/:id/write" element={<GroupWriter />} />
-      <Route path="/feed" element={<FeedBoard />} />
-      <Route path="/messages/:id" element={<MessageParent />} />
-      <Route path="/messages/:id/:child_id" element={<MessageParent />} />
-    </Routes>
+    <>
+      <Routes>
+        <Route path="/password-reset" element={<PasswordReset />} />
+        <Route path="/public/:token" element={<Public />} />
+        <Route path="/share" element={<Share />} />
+        <Route path="/signup" element={<Signup />} />
+        <Route path="/stop-notification-emails/:userId/:token" element={<StopNotificationEmails />} />
+        <Route path="/login" element={<Login />} />
+        <Route path="/logout" element={<Logout />} />
+        <Route path="/:type/:id/settings" element={<Settings />} />
+        <Route path="/bookmarks" element={<BookmarkBoard />} />
+        <Route path="/create-group" element={<CreateGroup />} />
+        <Route path="/groups/:id" element={<GroupBoard />} />
+        <Route path="/groups/:id/random" element={<RandomMessage />} />
+        <Route path="/groups/:id/search" element={<GroupSearchWrapper />} />
+        <Route path="/groups/:id/write" element={<GroupWriter />} />
+        <Route path="/feed" element={<FeedBoard />} />
+        <Route path="/messages/:id" element={<MessageParent />} />
+        <Route path="/messages/:id/:child_id" element={<MessageParent />} />
+      </Routes>
+      <ConfirmModal />
+    </>
   );
 }
 
