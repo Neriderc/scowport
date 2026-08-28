@@ -15,7 +15,7 @@ import MessageError from "./message-error.component.js";
 import { showConfirm } from "/src/store/confirm-modal.js";
 
 export default function Message(props) {
-
+  const MAX_DEPTH = 2; // won't magically work if you change this
   const navigate = useNavigate();
   const { t } = useTranslation();
   const me = useStore($me);
@@ -24,6 +24,8 @@ export default function Message(props) {
   const [files, setFiles] = useState(null);
   const [isRemoved, setIsRemoved] = useState(false);
   const [edit, setEdit] = useState(false);
+  const [showReplyWriter, setShowReplyWriter] = useState(false);
+  const [quoteReply, setQuoteReply] = useState(null);
 
   const [message, setMessage] = useState(null);
   const [errorMessage, setErrorMessage] = useState(null);
@@ -149,6 +151,12 @@ export default function Message(props) {
     if (props.isChild) {
       cn += " child";
     }
+    if (MAX_DEPTH > 1 && props.depth == 2) {
+      cn += " depth-2";
+    }
+    if (MAX_DEPTH > 2 && props.depth >= 3) {
+      cn += " depth-3";
+    }
     if (props.id == router.action) {
       cn += " highlight";
     }
@@ -178,6 +186,29 @@ export default function Message(props) {
   const shareMessage = event => {
     event.preventDefault();
     navigate(`/share?message=${props.id}`);
+  };
+
+  const replyToMessage = (event) => {
+    event.preventDefault();
+    setShowReplyWriter(false);
+    if (props.depth < MAX_DEPTH) {
+      if (showReplyWriter) {
+        setShowReplyWriter(false);
+      } else {
+        setShowReplyWriter(true);
+      }
+    } else {
+      props.replyToParent(message);
+    }
+  };
+
+  const replyToParent = (replyMessage) => {
+    if (showReplyWriter) {
+      setShowReplyWriter(false);
+    } else {
+      setShowReplyWriter(true);
+    }
+    setQuoteReply(replyMessage);
   };
 
   const editMessage = event => {
@@ -231,14 +262,17 @@ export default function Message(props) {
   const cancelEdit = event => {
     event.preventDefault();
     setEdit(false);
+    setShowReplyWriter(false);
+    setQuoteReply(null);
   };
 
   const displayWriter = (isChild, focus) => {
     return (
       <Writer
-        cancel={edit ? cancelEdit : null}
+        cancel={cancelEdit}
+        edit={edit}
         files={edit ? files : []}
-        focus={focus || !!edit}
+        focus={focus || !!edit} 
         group={message.group}
         messageId={edit ? props.id : null}
         parent={
@@ -247,6 +281,10 @@ export default function Message(props) {
         text={edit ? message.data["text"] : ""}
         title={edit ? message.data["title"] : ""}
         isChild={isChild}
+        author={author}
+        depth={props.depth}
+        message={message}
+        quoteReply={quoteReply}
       />
     );
   };
@@ -296,6 +334,7 @@ export default function Message(props) {
             />
             <div class="main">
               <MessageBody
+                author={author}
                 message={message}
                 files={files || []}
                 isPublic={props?.isPublic}
@@ -306,6 +345,7 @@ export default function Message(props) {
                 message={message}
                 editMessage={editMessage}
                 deleteMessage={deleteMessage}
+                replyToMessage={replyToMessage}
                 shareMessage={shareMessage}
                 publishInGroup={publishInGroup}
                 pinInGroup={pinInGroup}
@@ -313,23 +353,26 @@ export default function Message(props) {
                 openPublicLink={openPublicLink}
                 isPublic={props?.isPublic}
                 isChild={props?.isChild}
+                depth={props.depth}
               />
             </div>
           </Fragment>
         )}
       </div>
       {props?.postMessageComponent}
-      {!props?.isChild && !props?.isPublic && (
+      {props.depth < MAX_DEPTH && !props?.isPublic && (
         <MessageChildren
           childMessages={message?.children}
           key={props.id}
           id={props.id}
+          depth={props.depth}
+          replyToParent={replyToParent}
         />
       )}
-      {!edit && !props?.isPublic && !props?.isChild && (
-        <div class="message child mt-2">
+      {!edit && !props?.isPublic && (!props?.isChild || showReplyWriter) && (
+        <div class={`message child ${props.depth > 0 ? "reply" : ""} ${showReplyWriter ? "depth-2" : ""}`}>
           {me?.id && (
-            <div class="message-head d-none d-md-block">
+            <div class={"message-head d-none d-md-block "}>
               <img
                 class="rounded-circle w-3 material-shadow avatar"
                 style={util.backgroundHash(me.id)}

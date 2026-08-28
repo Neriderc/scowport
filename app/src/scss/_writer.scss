@@ -84,7 +84,7 @@
 
             .submit {
                 padding: 4px 10px;
-                margin-left: 2rem;
+                margin-left: 1rem;
                 background-color: #f7a71b;
                 color: white;
                 border: none;
@@ -95,6 +95,10 @@
             }
         }
     }
+
+    .reply-name {
+        font-weight: bold;
+    }
 }
 
 .message.child .writer {
@@ -103,7 +107,7 @@
 
 @media (min-width: map.get($grid-breakpoints, "md")) {
     .children .message .writer {
-        margin-left: 5rem;
+        margin-left: 1rem;
         margin-bottom: 1rem;
     }
 }
@@ -139,4 +143,9 @@
         background-color: color.adjust($zusam-color, $hue:-15deg);
         color: #fff;
     }
+}
+
+.ql-snow .ql-editor blockquote {
+    margin-top: 0 !important;
+    margin-bottom: 0 !important;
 }

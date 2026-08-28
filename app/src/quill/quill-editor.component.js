@@ -2,6 +2,15 @@ import { h } from "preact";
 import { useEffect, useRef } from "preact/hooks";
 import Quill from "quill";
 import "quill/dist/quill.snow.css";
+import { Delta } from "quill";
+
+const toolbarOptions = [
+  [{ header: [1, 2, 3, false] }],
+  ["bold", "italic", "underline", "link"],
+  [{ list: "ordered" }, { list: "bullet" }],
+  ["blockquote"],
+  ["clean"]
+];
 
 export default function QuillEditor(props) {
   const containerRef = useRef(null);
@@ -13,7 +22,10 @@ export default function QuillEditor(props) {
     );
     const quill = new Quill(editorContainer, {
       theme: "snow",
-      placeholder: props.placeholder
+      placeholder: props.placeholder,
+      modules: {
+        toolbar: toolbarOptions
+      }
     });
     if (props.editorRef) props.editorRef(quill);
 
@@ -23,6 +35,26 @@ export default function QuillEditor(props) {
       } catch {
         quill.setText(props.defaultValue);
       }
+    }
+
+    if (props.quoteReply) {
+      const data = JSON.parse(props.quoteReply.data.text);
+
+      const quoteDelta = new Delta(data.delta);
+
+      quoteDelta.ops.forEach(op => {
+        if (typeof op.insert === "string" && op.insert.includes("\n")) {
+          op.attributes = {
+            ...op.attributes,
+            blockquote: true
+          };
+        }
+      });
+
+      quoteDelta.insert("\n");
+
+      quill.setContents(quoteDelta);
+      quill.setSelection(quill.getLength(), 0);
     }
 
     // I cannot work out how to prevent the image being added into the editor

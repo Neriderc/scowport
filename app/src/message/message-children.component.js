@@ -82,6 +82,8 @@ export default function MessageChildren(props) {
           <MessageChild
             id={e.id}
             key={e.id}
+            depth={props.depth}
+            replyToParent={props.replyToParent}
           />
         );
       })}

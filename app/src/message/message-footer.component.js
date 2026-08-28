@@ -41,6 +41,7 @@ export default function MessageFooter(props) {
               to={
                 `/messages/${props?.message.id}${props?.message?.children.length ? "" : "?focus=reply"}`
               }
+              onClick={e => props.replyToMessage(e, props?.message?.children.length)}
             >
               {props?.message?.children.length ? (
                 props.message.children.some(e => notifications.isNew(e.id)) ? (

@@ -111,11 +111,18 @@ export default function WritingWidget(props) {
         onPasteCapture={onPaste}
         onKeyDown={onKeyDown}
       >
+        {!props.edit && props.depth == 0 && (
+          <span>Commenting on <span class="reply-name">{props?.message?.data?.title}</span></span>
+        )}
+        {!props.edit && props.depth > 0 && (
+          <span>Replying to <span class="reply-name">{props?.author?.name}</span></span>
+        )}
         <QuillEditor
           editorRef={quill => { props.editorRef.current = quill; }}
           defaultValue={text}
           placeholder={t("text_placeholder")}
           genPreview={genPreview}
+          quoteReply={props.quoteReply}
         />
       </div>
 
@@ -159,7 +166,7 @@ export default function WritingWidget(props) {
           </button>
         )}
         <div class="actions">
-          {!!props.cancel && (
+          {!!props.cancel && (props.depth > 0 || props.edit) && (
             <button class="cancel" onClick={e => props.cancel(e)}>
               {t("cancel")}
             </button>

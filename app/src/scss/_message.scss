@@ -184,7 +184,6 @@
 }
 
 .message {
-  width: 100%;
   margin-bottom: 1rem;
   position: relative;
   display: flex;
@@ -228,6 +227,11 @@
       @media (max-width: map.get($grid-breakpoints, "md")) {
         width: 100%;
       }
+
+      .child-author {
+        font-weight: bold;
+        margin: 5px;
+      }
     }
 
     .avatar {
@@ -240,10 +244,6 @@
       width: 5rem;
 
       @media (min-width: map.get($grid-breakpoints, "md")) {
-        .infos {
-          display: none;
-        }
-
         .options {
           display: none;
         }
@@ -528,5 +528,28 @@
 @keyframes shine {
   to {
     background-position-x: -200%;
+  }
+}
+
+.children {
+  .child,
+  .depth-2,
+  .depth-3 {
+    position: relative;
+  }
+
+  .child::before,
+  .depth-2::before,
+  .depth-3::before {
+    content: "";
+    border-left: 1px solid #f7a71b;
+  }
+
+  .depth-2 {
+    margin-left: 2rem;
+  }
+
+  .depth-3 {
+    margin-left: 4rem;
   }
 }

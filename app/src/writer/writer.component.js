@@ -228,6 +228,7 @@ export default function Writer(props) {
       inputFile={inputFile}
       sendMessage={sendMessage}
       cancel={props.cancel}
+      edit={props.edit}
       files={files}
       toggleFile={toggleFile}
       invertFiles={invertFiles}
@@ -237,6 +238,10 @@ export default function Writer(props) {
       text={props.text}
       title={props.title}
       editorRef={editorRef}
+      author={props.author}
+      depth={props.depth}
+      message={props.message}
+      quoteReply={props.quoteReply}
     />
   );
 }

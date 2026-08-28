@@ -19,6 +19,7 @@ export default function MessageParent(props) {
               message={props?.message}
               id={params.id}
               key={params.id}
+              depth={0}
             />
           </div>
         </article>
