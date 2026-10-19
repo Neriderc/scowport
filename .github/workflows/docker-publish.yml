@@ -16,21 +16,23 @@ jobs:
     steps:
       - name: Checkout source
         uses: actions/checkout@v4
+
       - name: Set up npm
         uses: actions/setup-node@v4
         with:
           node-version: 22
           cache: npm
+          cache-dependency-path: app/package-lock.json
 
       - name: Install webapp dependencies
-        run: npm ci
+        run: cd app && npm ci
 
       - name: Compile webapp
-        run: make compile-webapp
+        run: make compile-ci
 
       - name: Convert repo owner and name to lowercase
         run: |
-          echo "REPO_NAME_LC=$(echo '${{ github.repository_owner }}/pocketmoney' | tr '[:upper:]' '[:lower:]')" >> $GITHUB_ENV
+          echo "REPO_NAME_LC=$(echo '${{ github.repository_owner }}/scowport' | tr '[:upper:]' '[:lower:]')" >> $GITHUB_ENV
 
       - name: Log in to GHCR
         uses: docker/login-action@v3
@@ -38,6 +40,9 @@ jobs:
           registry: ghcr.io
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Generate production Dockerfile
+        run: cpp -o Dockerfile container/dockerfile/prod.docker
 
       - name: Build and push Docker image
         uses: docker/build-push-action@v5

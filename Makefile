@@ -4,6 +4,7 @@ GID := $(shell id -g)
 TARGETS := dev prod compile-webapp integ-tests lint unit-tests start-test start-dev
 DEV_OCI_IMAGE := scowport-dev
 PROD_OCI_IMAGE := scowport
+.ONESHELL:
 
 nothing:
 	@echo "Available targets: $(TARGETS)"
@@ -16,24 +17,28 @@ prod:
 	cpp -o Dockerfile container/dockerfile/prod.docker
 	$(CONTAINER_PGRM) build -t $(PROD_OCI_IMAGE) -f Dockerfile .
 
-.ONESHELL:
 compile-webapp-local:
 	cd app
 	mkdir -p dist
+	rm -rf ../public/*.{js,css,map,png}
 	npm install --save-dev
 	npm run build
-	rm -rf ../public/*.{js,css,map,png}
 	cp -r dist/* ../public/
 
 compile-webapp: dev
 	$(CONTAINER_PGRM) run --rm -it --name "scowport-lint" \
 		--user $(UID):$(GID) \
-		-e UID=$(UID) -e GID=$(GID) \
+		-e UID=$(UID) -e GID=$(GID) -e CI \
 		-v "$(CURDIR):/scowport:z" \
 		$(DEV_OCI_IMAGE) \
 		make compile-webapp-local
 
-.ONESHELL:
+compile-ci:
+	cd app
+	mkdir -p dist
+	npm run build
+	cp -r dist/* ../public/
+
 lint-app:
 	cd app
 	npm install --save-dev
