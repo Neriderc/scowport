@@ -14,7 +14,7 @@ export default function FileGrid(props) {
   if (!props.files || props.files.length === 0) {
     return null;
   }
-  if (props.files && props.files.length > 3) {
+  if (props.files && props.files.length > 1) {
     return (
       <div class="file-grid">
         {props.files

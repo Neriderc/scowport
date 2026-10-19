@@ -21,6 +21,7 @@ Scowport is a web app for [Zusam](https://github.com/zusam/zusam). It started as
 
 - Upload many photos and videos all at once
 - Two layered replies (similar to facebook), instead of Zusam's one layer with a button to child replies on another page.
+- Gallery mode is used when there is more than one file attached, compared to 4 or more files in Zusam
 
 ## Deployment
 
