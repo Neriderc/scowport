@@ -141,19 +141,10 @@ export default function WritingWidget(props) {
         {api?.info?.upload?.image && (
           <button
             class="option"
-            onClick={() => props.inputFile("image/*", true)}
-            title={t("upload_image")}
+            onClick={() => props.inputFile("image/*,video/*", true)}
+            title={t("upload_media")}
           >
             <FaIcon family={"regular"} icon={"images"} />
-          </button>
-        )}
-        {api?.info?.upload?.video && (
-          <button
-            class="option"
-            onClick={() => props.inputFile("video/*")}
-            title={t("upload_video")}
-          >
-            <FaIcon family={"solid"} icon={"film"} />
           </button>
         )}
         {api?.info?.upload?.pdf && (
