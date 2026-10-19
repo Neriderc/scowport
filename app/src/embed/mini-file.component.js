@@ -120,7 +120,6 @@ export default function MiniFile(props) {
   useEffect(() => {
     if (
       props.inWriter
-      && props.file.status == "ready"
       && innerRef && innerRef.current
     ) {
       innerRef.current.addEventListener("dragstart", fileDragStart);
@@ -138,17 +137,9 @@ export default function MiniFile(props) {
         innerRef.current.removeEventListener("drop", fileDrop);
       };
     }
-  }, []);
+  }, [props.inWriter, props.file.status, props.file.id]);
 
   switch (props.file.status) {
-  case "raw":
-    return (
-      <a class="file-embed file-loading rounded" id={props.file.id}>
-        <div class="miniature">
-          <FaIcon family={"regular"} icon={"check-circle"} />
-        </div>
-      </a>
-    );
   case "loading":
     return (
       <a class="file-embed file-loading rounded" id={props.file.id}>
@@ -174,6 +165,7 @@ export default function MiniFile(props) {
       </a>
     );
   case "ready":
+  case "raw":
   default:
     if (/pdf/.test(props.file.type) || /video/.test(props.file.type)) {
       return (
