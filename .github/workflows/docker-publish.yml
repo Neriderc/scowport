@@ -16,6 +16,17 @@ jobs:
     steps:
       - name: Checkout source
         uses: actions/checkout@v4
+      - name: Set up npm
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Install webapp dependencies
+        run: npm ci
+
+      - name: Compile webapp
+        run: make compile-webapp
 
       - name: Convert repo owner and name to lowercase
         run: |
