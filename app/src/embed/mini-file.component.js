@@ -113,7 +113,7 @@ export default function MiniFile(props) {
   const fileDrop = e => {
     // stops the browser from redirecting.
     e.preventDefault();
-    props.invertFiles(e.dataTransfer.getData("id"), props.file.id);
+    props.dragFileInsert(e.dataTransfer.getData("id"), props.file.id);
     return false;
   };
 

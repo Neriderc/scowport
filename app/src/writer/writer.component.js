@@ -37,11 +37,23 @@ export default function Writer(props) {
     setFiles(currentFiles.current.map(f => f.id === id ? Object.assign(f, file) : f));
   };
 
-  const invertFiles = (id_a, id_b) => {
-    const index_a = files.findIndex(e => e.id === id_a);
-    const index_b = files.findIndex(e => e.id === id_b);
-    [files[index_a], files[index_b]] = [files[index_b], files[index_a]];
-    setFiles(files);
+  const dragFileInsert = (id_a, id_b) => {
+    setFiles(currentFiles => {
+      const index_a = currentFiles.findIndex(e => e.id === id_a);
+      const index_b = currentFiles.findIndex(e => e.id === id_b);
+
+      if (index_a === -1 || index_b === -1 || index_a === index_b) {
+        return currentFiles;
+      }
+
+      const updatedFiles = [...currentFiles];
+      const [file] = updatedFiles.splice(index_a, 1);
+      const newIndex = index_a < index_b ? index_b - 1 : index_b;
+      updatedFiles.splice(newIndex, 0, file);
+
+      return updatedFiles;
+    });
+
     forceUpdate();
   };
 
@@ -231,7 +243,7 @@ export default function Writer(props) {
       edit={props.edit}
       files={files}
       toggleFile={toggleFile}
-      invertFiles={invertFiles}
+      dragFileInsert={dragFileInsert}
       addFiles={addFiles}
       group={props.group}
       isChild={props.isChild}
