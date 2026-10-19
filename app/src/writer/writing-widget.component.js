@@ -133,7 +133,7 @@ export default function WritingWidget(props) {
         <FileGrid
           files={props.files}
           toggleFile={props.toggleFile}
-          invertFiles={props.invertFiles}
+          dragFileInsert={props.dragFileInsert}
           inWriter={true}
         />
       )}

@@ -14,14 +14,14 @@ export default function FileGrid(props) {
   if (!props.files || props.files.length === 0) {
     return null;
   }
-  if (props.files && props.files.length > 3) {
+  if (props.files && props.files.length > 1) {
     return (
       <div class="file-grid">
         {props.files
           .map(e => (
             <MiniFile
               key={e.id}
-              invertFiles={props.invertFiles}
+              dragFileInsert={props.dragFileInsert}
               toggleFile={toggleFile}
               file={e}
               inWriter={props.inWriter}
@@ -37,7 +37,7 @@ export default function FileGrid(props) {
           <BigFile
             key={e.id}
             toggleFile={toggleFile}
-            invertFiles={props.invertFiles}
+            dragFileInsert={props.dragFileInsert}
             file={e}
             inWriter={props.inWriter}
           />
