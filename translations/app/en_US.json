@@ -47,6 +47,7 @@
     "hourly": "Hourly",
     "immediately": "Immediately",
     "in": "in",
+    "invite_someone": "Invite someone",
     "invite_noname": "You've been invited to a group",
     "Invalid login/password": "Invalid login and/or password",
     "invalid_token_error": "This link is no longer valid.",
