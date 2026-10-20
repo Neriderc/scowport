@@ -6,6 +6,7 @@ import { useEffect, useState } from "preact/hooks";
 import { useTranslation } from "react-i18next";
 import { useNavigate, useParams } from "react-router-dom";
 import { showConfirm } from "/src/store/confirm-modal.js";
+import { leaveGroup} from "./group-helpers";
 
 export default function GroupSettings() {
 
@@ -75,44 +76,6 @@ export default function GroupSettings() {
     }).catch(() => null);
   };
 
-  const leaveGroup = async (event) => {
-    event.preventDefault();
-    if (await showConfirm({
-      title: t("are_you_sure"),
-      message: t("you_will_need_invite"),
-      confirmText: t("quit_group"),
-      cancelText: t("cancel"),
-      variant: "danger"
-    })) {
-      if (group.users.length > 1 || await showConfirm({
-        title: t("are_you_sure"),
-        message: t("you_are_last_group_will_delete"),
-        confirmText: t("delete_group"),
-        cancelText: t("cancel"),
-        variant: "danger"
-      })) {
-        leave();
-      }
-    }
-  };
-
-  const leave = async () => {
-    try {
-      const res = await http.post(`/api/groups/${group.id}/leave`, {});
-
-      if (!res || !res["entityType"]) {
-        alert.add(t("error"), "alert-danger");
-        return;
-      }
-      await meService.update();
-
-      alert.add(t("group_left"));
-      navigate("/");
-    } catch (e) {
-      console.warn(e);
-    }
-  };
-
   return (
     <div>
       <div class="group-settings mb-3">
@@ -168,7 +131,7 @@ export default function GroupSettings() {
                   )}
                   <form>
                     <button
-                      onClick={e => leaveGroup(e)}
+                      onClick={e => leaveGroup(e, group, navigate, t)}
                       class="btn btn-outline-danger"
                     >
                       {t("quit_group")}

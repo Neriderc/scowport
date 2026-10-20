@@ -1,6 +1,7 @@
 import _BookmarkBoard from "./bookmark-board.component.js";
 import _CreateGroup from "./create-group.component.js";
 import _GroupBoard from "./group-board.component.js";
+import _GroupHeader from "./group-header.component.js";
 import _FeedBoard from "./feed-board.component.js";
 import _HumanTime from "./human-time.component.js";
 import _Notification from "./notification.component.js";
@@ -11,6 +12,7 @@ import _Share from "./share.component.js";
 export const BookmarkBoard = _BookmarkBoard;
 export const CreateGroup = _CreateGroup;
 export const GroupBoard = _GroupBoard;
+export const GroupHeader = _GroupHeader;
 export const FeedBoard = _FeedBoard;
 export const HumanTime = _HumanTime;
 export const Notification = _Notification;
