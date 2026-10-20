@@ -9,7 +9,7 @@ import {
 } from "/src/outside";
 import { MessageParent } from "/src/message";
 import { GroupWriter } from "/src/writer";
-import { CreateGroup, GroupBoard, FeedBoard, Share, BookmarkBoard, RandomMessage } from "/src/pages";
+import { CreateGroup, GroupBoard, FeedBoard, Share, BookmarkBoard, RandomMessage, GroupInviteBoard } from "/src/pages";
 import { Settings } from "/src/settings";
 import { GroupSearchWrapper } from "/src/navbar";
 import {
@@ -107,11 +107,7 @@ function App() {
         }
 
         if (location.pathname.match(/^\/invitation/)) {
-          if (user) {
-            http.post(`/api/groups/invitation/${router.id}`, {}).catch(() => null).then(res => {
-              if (res) navigate(res.group ? "/groups/" + res.group : "/");
-            });
-          } else {
+          if (!user) {
             navigate(`/signup?inviteKey=${router.id}`);
           }
         }
@@ -142,6 +138,7 @@ function App() {
         <Route path="/bookmarks" element={<BookmarkBoard />} />
         <Route path="/create-group" element={<CreateGroup />} />
         <Route path="/groups/:id" element={<GroupBoard />} />
+        <Route path="/invitation/:id" element={<GroupInviteBoard />} />
         <Route path="/groups/:id/random" element={<RandomMessage />} />
         <Route path="/groups/:id/search" element={<GroupSearchWrapper />} />
         <Route path="/groups/:id/write" element={<GroupWriter />} />

@@ -24,9 +24,12 @@ export default function GroupHeader(props) {
         if (!cancelled) {
           setGroup(res);
         }
+        if (location.pathname.match(/^\/invitation/)) {
+          navigate("/groups/" + props.id);
+        }
       })
       .catch(e => {
-        if ([403, 404].includes(e?.status)) {
+        if ([403, 404].includes(e?.status) && !location.pathname.match(/^\/invitation/)) {
           navigate("/");
         }
       })
@@ -56,7 +59,8 @@ export default function GroupHeader(props) {
 
           <div class="group-header-info">
             <h1 class="group-header-name">
-              {loading ? "…" : group?.name}
+              {props.invite ? t("invite_noname") :
+                loading ? "…" : group?.name}
             </h1>
 
             {group?.users?.length != null && (
@@ -83,7 +87,7 @@ export default function GroupHeader(props) {
               <button
                 type="button"
                 class="btn btn-primary group-join-button"
-                onClick={() => props.onJoin?.(group)}
+                onClick={() => props.onJoin()}
               >
                 <FaIcon family="solid" icon="plus" />
                 <span>{t("join_group")}</span>

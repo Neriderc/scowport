@@ -16,6 +16,7 @@ export default function GroupBoard() {
         isFeed={false}
         id={params.id}
         isMember={true}
+        invite={false}
         onSettings={() => navigate(`/groups/${params.id}/settings`)}
       />
       <div class="content">
