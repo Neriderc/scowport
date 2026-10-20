@@ -106,12 +106,6 @@ function App() {
           navigate(redirect);
         }
 
-        if (location.pathname.match(/^\/invitation/)) {
-          if (!user) {
-            navigate(`/signup?inviteKey=${router.id}`);
-          }
-        }
-
         if (!router.isOutside() && !user) {
           navigate("/logout");
         }
