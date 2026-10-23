@@ -1,12 +1,13 @@
 import { h } from "preact";
 import { alert, storage, http, router } from "/src/core";
 import { useTranslation } from "react-i18next";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 
 export default function Signup() {
 
   const navigate = useNavigate();
   const { t } = useTranslation();
+  const [searchParams] = useSearchParams();
 
   const sendSignupForm = e => {
     e.preventDefault();
@@ -23,7 +24,13 @@ export default function Signup() {
       .then(res => {
         if (res && !res.message) {
           storage.set("apiKey", res.api_key);
-          setTimeout(() => navigate(res.group ? "/groups/" + res.group : "/"), 100);
+          let path;
+          if (router.getParam("encodedInvite")) {
+            path = "/invitation/" + router.getParam("encodedInvite") + "?e";
+          } else {
+            path = "/invitation/" + router.getParam("inviteKey");
+          }
+          setTimeout(() => navigate(path), 100);
         } else {
           alert.add(t(res.message));
         }

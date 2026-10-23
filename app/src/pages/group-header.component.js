@@ -45,9 +45,9 @@ export default function GroupHeader(props) {
   }, [props.id]);
 
   return (
-    <div class="group-header-container container-fluid">
+    <div class="header-container container-fluid">
       <section
-        class="group-header"
+        class="header-section"
         aria-label={group?.name || t("group")}
       >
         <div class="group-header-main">

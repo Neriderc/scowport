@@ -23,7 +23,7 @@ export const leaveGroup = async (event, group, navigate, t) => {
   }
 };
 
-const leave = async (group, navigate, t) => {
+export const leave = async (group, navigate, t) => {
   try {
     const res = await http.post(`/api/groups/${group.id}/leave`, {});
 
@@ -34,7 +34,7 @@ const leave = async (group, navigate, t) => {
     await meService.update();
 
     alert.add(t("group_left"));
-    navigate("/");
+    if (navigate) navigate("/");
   } catch (e) {
     console.warn(e);
   }

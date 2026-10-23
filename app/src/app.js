@@ -22,6 +22,7 @@ import {
 import { useEffect, useState } from "preact/hooks";
 import ConfirmModal from "/src/misc/confirm-modal.component.js";
 import i18n from "i18next";
+import { Invite } from "./pages";
 
 function App() {
 
@@ -133,6 +134,7 @@ function App() {
         <Route path="/create-group" element={<CreateGroup />} />
         <Route path="/groups/:id" element={<GroupBoard />} />
         <Route path="/invitation/:id" element={<GroupInviteBoard />} />
+        <Route path="/invite" element={<Invite />} />
         <Route path="/groups/:id/random" element={<RandomMessage />} />
         <Route path="/groups/:id/search" element={<GroupSearchWrapper />} />
         <Route path="/groups/:id/write" element={<GroupWriter />} />
