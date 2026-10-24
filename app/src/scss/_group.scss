@@ -1,0 +1,191 @@
+
+.header-container {
+  .message-preview-placeholder {
+    display: block;
+    width: 100%;
+    max-width: 320px;
+    height: 215px;
+    margin: 1rem;
+    background: linear-gradient(15deg, #999, #ddd);
+
+    @media (max-width: map.get($grid-breakpoints, "sm")) {
+      margin: 1rem 0;
+    }
+  }
+
+  .header-section {
+    width: 100%;
+    max-width: 1000px;
+    position: relative;
+    margin-top: -10px;
+
+    @media (max-width: map.get($grid-breakpoints, "sm")) {
+      margin: 1rem 0;
+    }
+
+
+    .message-preview-loading {
+      background: linear-gradient(110deg, #ececec 8%, #f5f5f5 18%, #ececec 33%);
+      background-size: 200% 100%;
+      animation: 1s shine linear infinite;
+    }
+
+    & > div {
+      width: 100%;
+      border: none;
+      border-radius: 4px;
+
+      .avatar {
+        z-index: 10;
+        display: block;
+        width: 150px;
+        height: 150px;
+        position: absolute;
+        left: 10px;
+        top: 20px;
+        border-radius: 50%;
+        overflow: hidden;
+        transition: all 0.2s ease-in-out;
+      }
+    }
+  }
+}
+
+
+.header-container {
+  padding: 1.5rem 1rem 0;
+  margin-bottom: 1.5rem;
+
+  .header-section {
+    width: 100%;
+    margin-left: auto;
+    margin-right: auto;
+    max-width: 1200px;
+    overflow: hidden;
+    background: #fff;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgb(0 0 0 / 8%);
+  }
+
+  .group-header-main {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+    padding: 1.75rem 2rem;
+  }
+
+  .group-header-avatar {
+    display: flex;
+    flex: 0 0 108px;
+    width: 108px;
+    height: 108px;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    border-radius: 50%;
+    background: #f1eeee;
+  }
+
+  .group-header-avatar-placeholder {
+    color: #777;
+    font-size: 2.5rem;
+  }
+
+  .group-header-info {
+    flex: 1;
+    min-width: 0;
+  }
+
+  .group-header-name {
+    margin: 0 0 0.5rem;
+    color: #343a40;
+    font-size: 1.8rem;
+    font-weight: 600;
+    overflow-wrap: anywhere;
+  }
+
+  .group-header-members {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: #68717a;
+    font-size: 0.95rem;
+  }
+
+  .group-header-actions {
+    display: flex;
+    flex-shrink: 0;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 0.75rem;
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      min-height: 48px;
+      padding: 0.65rem 1.15rem;
+      border-radius: 7px;
+    }
+
+    .group-join-button {
+      background-color: #ffa510;
+      border-color: #ffa510;
+      color: #fff;
+
+      &:hover {
+        background-color: #eb9500;
+        border-color: #eb9500;
+      }
+    }
+  }
+
+  .group-header-divider {
+    gap: 1.5rem;
+    min-height: 15px;
+    padding: 0 1rem;
+    border-top: 1px solid #e1e4e7;
+  }
+
+  @media (max-width: 768px) {
+    padding: 1rem 0.5rem 0;
+
+    .group-header-main {
+      flex-wrap: wrap;
+      gap: 1rem;
+      padding: 1.25rem;
+    }
+
+    .group-header-avatar {
+      flex-basis: 72px;
+      width: 72px;
+      height: 72px;
+    }
+
+    .group-header-name {
+      font-size: 1.4rem;
+    }
+
+    .group-header-actions {
+      width: 100%;
+      justify-content: flex-start;
+
+      .btn {
+        flex: 1;
+      }
+    }
+  }
+
+  .fa-icon.solid.cog {
+    width: 1.5rem;
+    height: 1.5rem;
+  }
+}
+
+.invite-group-list {
+  width: fit-content;
+  max-width: 100%;
+}
