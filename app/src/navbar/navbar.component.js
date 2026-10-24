@@ -59,13 +59,24 @@ export default function Navbar() {
 
         <Link
           to={"/feed"}
-          class={`seamless-link nav-link feed-button unselectable ${router.route === "feed" ? "feed-active" : ""}`}
+          class={`seamless-link nav-link nav-button unselectable ${router.route === "feed" ? "nav-active" : ""}`}
           title={t("feed_group")}
           aria-label={t("feed_group")}
         >
           <FaIcon
             family={"regular"}
             icon={"house"}
+          />
+        </Link>
+        <Link
+          to={"/help"}
+          class={`seamless-link nav-link nav-button unselectable ${router.route === "help" ? "nav-active" : ""}`}
+          title={t("help")}
+          aria-label={t("help")}
+        >
+          <FaIcon
+            family={"solid"}
+            icon={"question"}
           />
         </Link>
       </div>
