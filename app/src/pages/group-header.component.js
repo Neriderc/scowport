@@ -1,5 +1,5 @@
 
-import { h } from "preact";
+import { h, Fragment } from "preact";
 import { http } from "/src/core";
 import { FaIcon } from "/src/misc";
 import { useEffect, useState } from "preact/hooks";
@@ -75,14 +75,24 @@ export default function GroupHeader(props) {
 
           <div class="group-header-actions">
             {props.isMember ? (
-              <button
-                type="button"
-                class="btn btn-outline-danger"
-                onClick={e => leaveGroup(e, group, navigate, t)}
-              >
-                <FaIcon family="solid" icon="user-minus" />
-                <span>{t("quit_group")}</span>
-              </button>
+              <>
+                <button
+                  type="button"
+                  class="btn btn-outline-primary"
+                  onClick={()=>navigate("/invite?group=" + props.id)}
+                >
+                  <FaIcon family="solid" icon="users" />
+                  <span>{t("invite", "Invite to group")}</span>
+                </button>
+                <button
+                  type="button"
+                  class="btn btn-outline-danger"
+                  onClick={e => leaveGroup(e, group, navigate, t)}
+                >
+                  <FaIcon family="solid" icon="user-minus" />
+                  <span>{t("quit_group")}</span>
+                </button>
+              </>
             ) : (
               <button
                 type="button"
