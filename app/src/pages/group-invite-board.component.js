@@ -6,8 +6,8 @@ import { http, me as meService } from "/src/core";
 import { $me } from "/src/store/me.js";
 import { useStore } from "@nanostores/preact";
 import { useTranslation } from "react-i18next";
-import { leaveGroup} from "../settings/group-helpers";
-import { useEffect } from "preact/hooks";
+import { leaveGroup } from "../settings/group-helpers";
+import { useEffect, useState } from "preact/hooks";
 
 export default function GroupInviteBoard() {
   const navigate = useNavigate();
@@ -15,6 +15,8 @@ export default function GroupInviteBoard() {
   const [searchParams] = useSearchParams();
   const me = useStore($me);
   const { t } = useTranslation();
+
+  const [joiningAll, setJoiningAll] = useState(false);
 
   const decode = encoded => {
     const base64 = encoded
@@ -60,14 +62,6 @@ export default function GroupInviteBoard() {
     } catch (error) {
       invalidInvite = true;
     }
-  } else {
-    // Old style invite, go straight to the group.
-    http.post(
-      `/api/groups/invitation/${params.id}`,
-      {}
-    ).then((res) => {
-      navigate("/groups/" + res.group);
-    });
   }
 
   const isMember = groupId =>
@@ -95,7 +89,44 @@ export default function GroupInviteBoard() {
     }
   };
 
-  const onSingleGroupClick = (e) => {
+  const onJoinAll = async () => {
+    const groupsToJoin = inviteGroups.filter(
+      group => !isMember(group.groupId)
+    );
+
+    if (groupsToJoin.length === 0 || joiningAll) {
+      return;
+    }
+
+    setJoiningAll(true);
+
+    try {
+      const results = await Promise.allSettled(
+        groupsToJoin.map(group =>
+          http.post(`/api/groups/invitation/${group.inviteKey}`, {})
+        )
+      );
+
+      await meService.update();
+
+      const failed = results.filter(
+        result =>
+          result.status === "rejected" ||
+          !result.value ||
+          result.value.error
+      ).length;
+
+      if (failed > 0) {
+        console.error(`${failed} group invitation(s) failed`);
+      }
+    } catch (error) {
+      console.error("Failed to join groups:", error);
+    } finally {
+      setJoiningAll(false);
+    }
+  };
+
+  const onSingleGroupClick = () => {
     http.post(
       `/api/groups/invitation/${inviteGroups[0].inviteKey}`,
       {}
@@ -111,6 +142,21 @@ export default function GroupInviteBoard() {
       navigate(`/groups/${inviteGroups[0].groupId}`);
     }
   };
+
+  useEffect(() => {
+    if (!isEncodedInvite && params.id) {
+      http.post(
+        `/api/groups/invitation/${params.id}`,
+        {}
+      ).then(res => {
+        if (res?.group) {
+          navigate("/groups/" + res.group);
+        }
+      }).catch(error => {
+        console.error("Failed to process invitation:", error);
+      });
+    }
+  }, []);
 
   useEffect(() => {
     meService.fetch().then(user => {
@@ -188,7 +234,38 @@ export default function GroupInviteBoard() {
                     </div>
                   ) : (
                     <>
+
+
                       <div class="list-group invite-group-list mb-3">
+                        {inviteGroups.some(group => !isMember(group.groupId)) && (
+                          <div class="d-flex justify-content-end mb-3">
+                            <button
+                              type="button"
+                              class="btn btn-primary"
+                              onClick={onJoinAll}
+                              disabled={joiningAll}
+                            >
+                              {joiningAll ? (
+                                <>
+                                  <span
+                                    class="spinner-border spinner-border-sm me-2"
+                                    aria-hidden="true"
+                                  />
+                                  {t("joining_groups")}
+                                </>
+                              ) : (
+                                <>
+                                  <FaIcon
+                                    family="solid"
+                                    icon="users"
+                                  />
+                                  {" "}
+                                  {t("join_all_groups")}
+                                </>
+                              )}
+                            </button>
+                          </div>
+                        )}
                         {inviteGroups.map(group => {
                           const joined = isMember(group.groupId);
                           return (

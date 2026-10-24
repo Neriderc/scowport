@@ -62,6 +62,8 @@
     "invitation_welcome": "Welcome to Zusam. Please sign up before joining the group.",
     "join_group": "Join group",
     "joined": "Joined",
+    "joining_groups": "Joining groups...",
+    "join_all_groups": "Join all groups",
     "just_now": "Just now",
     "lang": "language",
     "login_input": "Choose a login",
