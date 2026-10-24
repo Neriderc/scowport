@@ -1,4 +1,4 @@
-import { h } from "preact";
+import { h, Fragment } from "preact";
 import { FaIcon } from "/src/misc";
 import { Navbar } from "/src/navbar";
 import { useParams, useSearchParams, useNavigate } from "react-router-dom";
@@ -95,6 +95,15 @@ export default function GroupInviteBoard() {
     }
   };
 
+  const onSingleGroupClick = (e) => {
+    http.post(
+      `/api/groups/invitation/${inviteGroups[0].inviteKey}`,
+      {}
+    ).then((res) => {
+      navigate("/groups/" + res.group);
+    });
+  };
+
   const onContinue = () => {
     if (inviteGroups.length > 1) {
       navigate("/feed");
@@ -134,75 +143,110 @@ export default function GroupInviteBoard() {
               </div>
 
               <div class="group-header-info">
-                <h1 class="group-header-name">
-                  {t("invite_noname")}
-                </h1>
-
-                <div class="group-header-members">
-                  <span class="w-75">
-                    {t("invite_join_page_explanation")}
-                  </span>
-                </div>
+                {inviteGroups.length === 1 ? (
+                  <>
+                    <h1 class="group-header-name">
+                      {t("invite_name")} <strong class="text-primary">{inviteGroups[0].name}</strong>
+                    </h1>
+                  </>) : (
+                  <>
+                    <h1 class="group-header-name">
+                      {t("invite_noname")}
+                    </h1>
+                
+                    <div class="group-header-members">
+                      <span class="w-75">
+                        {t("invite_join_page_explanation")}
+                      </span>
+                    </div>
+                  </>
+                )}
               </div>
             </div>
 
             <div class="container-fluid">
               <section
-                class="invite-groups mt-3"
+                class="invite-groups"
                 aria-labelledby="invite-groups-heading"
               >
-                <h2 id="invite-groups-heading">
-                  {t("invited_groups")}
-                </h2>
-
-                <p>
-                  {t("invited_groups_explanation")}
-                </p>
-
-                {!invalidInvite && inviteGroups.length > 3 ? (
-                  <div class="list-group invite-group-list mb-3">
-                    {inviteGroups.map(group => {
-                      const joined = isMember(group.groupId);
-                      return (
-                        <div
-                          key={group.groupId}
-                          class="list-group-item d-flex align-items-center gap-3"
-                        >
-                          <span class="flex-grow-1">
-                            {group.name}
-                          </span>
-
-                          <button
-                            type="button"
-                            class={`btn ${
-                              joined
-                                ? "btn-outline-success"
-                                : "btn-primary"
-                            }`}
-                            onClick={(e) => onGroupClick(e,group)}
-                          >
-                            {joined
-                              ? t("joined", "Joined")
-                              : t("join_group", "Join group")}
-                          </button>
-                        </div>
-                      );
-                    })}
-                  </div>
-                ) : (
-                  <p class="text-muted">
-                    {t("invalid_token_error")}
+                {inviteGroups.length === 1 ? "" : (
+                  <p>
+                    {t("invited_groups_explanation")}
                   </p>
                 )}
-                <div class="m-4">
-                  <button
-                    type="button"
-                    class="btn btn-primary"
-                    onClick={onContinue}
-                  >
-                    {t("continue")}
-                  </button>
-                </div>
+                
+                {!invalidInvite ? (
+                  inviteGroups.length === 1 ? (
+                    <div class="mb-3 text-end">
+                      <button
+                        type="button"
+                        class="btn btn-primary p-3 fs-4"
+                        onClick={onSingleGroupClick}
+                      >
+                        {t("join_group")}
+                      </button>
+                    </div>
+                  ) : (
+                    <>
+                      <div class="list-group invite-group-list mb-3">
+                        {inviteGroups.map(group => {
+                          const joined = isMember(group.groupId);
+                          return (
+                            <div
+                              key={group.groupId}
+                              class="list-group-item d-flex align-items-center gap-3"
+                            >
+                              <span class="flex-grow-1 fs-5">
+                                {group.name}
+                              </span>
+
+                              <button
+                                type="button"
+                                class={`btn ${
+                                  joined
+                                    ? "btn-outline-success"
+                                    : "btn-primary"
+                                } fs-6`}
+                                onClick={(e) => onGroupClick(e,group)}
+                              >
+                                {joined ?
+                                  <>
+                                    <FaIcon family="solid" icon="check-circle" />
+                                    {" "}{t("joined")}
+                                  </>
+                                  : t("join_group")}
+                              </button>
+                            </div>
+                          );
+                        })}
+
+                      </div>
+                      <div class="mt-3 mb-3">
+                        <button
+                          type="button"
+                          class="btn btn-primary"
+                          onClick={onContinue}
+                        >
+                          {t("continue")}
+                        </button>
+                      </div>
+                    </>
+                  )) : (
+                  <>
+                    <p class="text-muted">
+                      {t("invalid_token_error")}
+                    </p>
+                    <div class="m-4">
+                      <button
+                        type="button"
+                        class="btn btn-primary"
+                        onClick={onContinue}
+                      >
+                        {t("continue")}
+                      </button>
+                    </div>
+                  </>
+                )}
               </section>
             </div>
           </section>
