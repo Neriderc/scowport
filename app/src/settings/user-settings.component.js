@@ -124,7 +124,7 @@ export default function UserSettings() {
           <div class="identite card-body">
             <div class="container-fluid p-1">
               <div class="row">
-                <div class="col-12 col-md-2">
+                <div class="col-12 col-md-2 text-center">
                   <img
                     class="img-fluid rounded-circle material-shadow avatar"
                     src={
@@ -134,8 +134,15 @@ export default function UserSettings() {
                     }
                     style={util.backgroundHash(me.id || "")}
                     onError={e => (e.currentTarget.src = util.defaultAvatar)}
-                    onClick={e => inputAvatar(e)}
                   />
+                  <button
+                    type="button"
+                    class="btn btn-outline-secondary btn-sm mt-2"
+                    onClick={inputAvatar}
+                  >
+                    <span aria-hidden="true">📷</span>{" "}
+                    {t("update_photo")}
+                  </button>
                 </div>
                 <div class="col-12 col-md-10">
                   <form id="settings_form" class="mb-3">
@@ -233,43 +240,46 @@ export default function UserSettings() {
                     </div>
                     <button
                       onClick={e => updateSettings(e)}
-                      class="btn btn-primary"
+                      class="btn btn-primary mt-3"
                     >
                       {t("save_changes")}
                     </button>
                   </form>
-                  <form id="api_key_form">
-                    <div class="form-group">
-                      <label for="apiKey">
-                        {t("api_key")}:{" "}
+                  <details class="advanced-settings mt-4">
+                    <summary class="mb-3">
+                      {t("advanced_settings")}
+                    </summary>
+                    <form id="api_key_form" class="mb-4">
+                      <div class="form-group">
+                        <label for="apiKey">{t("api_key")}: </label>
+                        <input
+                          type="text"
+                          name="apiKey"
+                          value={apiKey}
+                          class="form-control font-size-80"
+                          readonly="readonly"
+                        />
+                      </div>
+                      <button
+                        class="btn btn-outline-secondary"
+                        onClick={resetApiKey}
+                      >
+                        {t("reset_api_key")}
+                      </button>
+                    </form>
+                    <form id="destroy_form">
+                      <label class="d-block" for="destroy_account">
+                        {t("destroy_account_explain")}
                       </label>
-                      <input
-                        type="text"
-                        name="apiKey"
-                        value={apiKey}
-                        class="form-control font-size-80"
-                        readonly="readonly"
-                      />
-                    </div>
-                    <button
-                      class="btn btn-outline-secondary"
-                      onClick={resetApiKey}
-                    >
-                      {t("reset_api_key")}
-                    </button>
-                  </form>
-                  <form id="destroy_form">
-                    <label class="d-block" for="destroy_account">
-                      {t("destroy_account_explain")}
-                    </label>
-                    <button
-                      onClick={e => destroyAccount(e)}
-                      name="destroy_account"
-                      class="btn btn-danger"
-                    >
-                      {t("destroy_account")}
-                    </button>
-                  </form>
+                      <button
+                        onClick={e => destroyAccount(e)}
+                        name="destroy_account"
+                        class="btn btn-danger"
+                      >
+                        {t("destroy_account")}
+                      </button>
+                    </form>
+                  </details>
                 </div>
               </div>
             </div>

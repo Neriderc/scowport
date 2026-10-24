@@ -9,7 +9,7 @@ import {
 } from "/src/outside";
 import { MessageParent } from "/src/message";
 import { GroupWriter } from "/src/writer";
-import { CreateGroup, GroupBoard, FeedBoard, Share, BookmarkBoard, RandomMessage } from "/src/pages";
+import { CreateGroup, GroupBoard, FeedBoard, Share, BookmarkBoard, RandomMessage, GroupInviteBoard } from "/src/pages";
 import { Settings } from "/src/settings";
 import { GroupSearchWrapper } from "/src/navbar";
 import {
@@ -22,6 +22,7 @@ import {
 import { useEffect, useState } from "preact/hooks";
 import ConfirmModal from "/src/misc/confirm-modal.component.js";
 import i18n from "i18next";
+import { Invite } from "./pages";
 
 function App() {
 
@@ -106,16 +107,6 @@ function App() {
           navigate(redirect);
         }
 
-        if (location.pathname.match(/^\/invitation/)) {
-          if (user) {
-            http.post(`/api/groups/invitation/${router.id}`, {}).catch(() => null).then(res => {
-              if (res) navigate(res.group ? "/groups/" + res.group : "/");
-            });
-          } else {
-            navigate(`/signup?inviteKey=${router.id}`);
-          }
-        }
-
         if (!router.isOutside() && !user) {
           navigate("/logout");
         }
@@ -142,6 +133,8 @@ function App() {
         <Route path="/bookmarks" element={<BookmarkBoard />} />
         <Route path="/create-group" element={<CreateGroup />} />
         <Route path="/groups/:id" element={<GroupBoard />} />
+        <Route path="/invitation/:id" element={<GroupInviteBoard />} />
+        <Route path="/invite" element={<Invite />} />
         <Route path="/groups/:id/random" element={<RandomMessage />} />
         <Route path="/groups/:id/search" element={<GroupSearchWrapper />} />
         <Route path="/groups/:id/write" element={<GroupWriter />} />

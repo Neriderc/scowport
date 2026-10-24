@@ -35,6 +35,16 @@ export default function GroupsDropdownNavbar() {
                 {`+ ${t("create_a_group")}`}
               </Link>
             )}
+
+            {api?.info?.show?.group_invitation_links && (
+              <Link
+                to={"/invite"}
+                class="seamless-link unselectable d-inline-flex align-items-center gap-1"
+              >
+                <FaIcon family="solid" icon="users" fontSize="2rem" />
+                {`${t("invite_someone")}`}
+              </Link>
+            )}
           </div>
         </div>
       )}
