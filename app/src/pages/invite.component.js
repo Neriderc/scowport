@@ -1,5 +1,5 @@
 import { h } from "preact";
-import { me as meService, http } from "/src/core";
+import { me as meService, router } from "/src/core";
 import { Navbar } from "/src/navbar";
 import { useStore } from "@nanostores/preact";
 import { $me } from "/src/store/me.js";
@@ -13,13 +13,21 @@ export default function Invite() {
   const me = useStore($me);
   const [loaded, setLoaded] = useState(false);
   const [selectedGroups, setSelectedGroups] = useState([]);
-  const [showUrl, setShowUrl] = useState(false);
 
   useEffect(() => {
     setTimeout(() => {
       meService.fetch().then(user => {
         setLoaded(true);
-        if (!user || user?._networkError) { return; }
+
+        if (!user || user?._networkError) {
+          return;
+        }
+
+        const groupId = router.getParam("group");
+
+        if (groupId && user.groups?.some(group => group.id === groupId)) {
+          setSelectedGroups([groupId]);
+        }
       });
     }, 100);
   }, []);
@@ -105,7 +113,7 @@ export default function Invite() {
                 aria-labelledby="invite-groups-heading"
               >
                 <h2 id="invite-groups-heading">
-                  {t("select_groups_to_invite", "Select groups to invite")}
+                  {t("select_groups_to_invite")}
                 </h2>
 
                 <p>
@@ -193,7 +201,7 @@ export default function Invite() {
                   </div>
                 ) : (
                   <p class="text-muted">
-                    {t("no_groups", "You are not a member of any groups.")}
+                    {t("no_groups")}
                   </p>
                 )}
               </section>
