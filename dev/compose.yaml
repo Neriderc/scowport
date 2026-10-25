@@ -12,6 +12,8 @@ services:
       - DOMAIN=localhost
       - APP_ENV=dev
     image: zusam
+    volumes:
+      - ./data:/zusam/data
 
   scowport:
     ports:

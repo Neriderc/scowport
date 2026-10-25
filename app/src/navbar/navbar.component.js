@@ -1,18 +1,20 @@
 import { h } from "preact";
 import { router, util } from "/src/core";
 import { Search } from "/src/pages";
-import { GroupsDropdownNavbar, NotificationsDropdownNavbar } from "/src/navbar";
+import { GroupsDropdownNavbar, NotificationsDropdownNavbar, HelpTutorial } from "/src/navbar";
 import { Link } from "react-router-dom";
 import { useStore } from "@nanostores/preact";
 import { $me } from "/src/store/me.js";
 import { useTranslation } from "react-i18next";
 import { FaIcon } from "/src/misc";
+import { useState } from "preact/hooks";
+const TOUR_KEY = "app-tour-step";
 
 export default function Navbar() {
 
   const { t } = useTranslation();
   const me = useStore($me);
-
+  const [tutorialActive, setTutorialActive] = useState(!!localStorage.getItem(TOUR_KEY));
   return (
     <div class="main-nav nav align-items-center z-index-100">
       <div class="navbar-block">
@@ -59,7 +61,8 @@ export default function Navbar() {
 
         <Link
           to={"/feed"}
-          class={`seamless-link nav-link feed-button unselectable ${router.route === "feed" ? "feed-active" : ""}`}
+          id="feed"
+          class={`seamless-link nav-link nav-button unselectable ${router.route === "feed" ? "nav-active" : ""}`}
           title={t("feed_group")}
           aria-label={t("feed_group")}
         >
@@ -68,6 +71,18 @@ export default function Navbar() {
             icon={"house"}
           />
         </Link>
+        <button
+          id="help"
+          class={`seamless-link nav-link nav-button unselectable ${router.route === "help" ? "nav-active" : ""}`}
+          title={t("help")}
+          aria-label={t("help")}
+          onClick={() => { setTutorialActive(true); localStorage.removeItem(TOUR_KEY); }}
+        >
+          <FaIcon
+            family={"solid"}
+            icon={"question"}
+          />
+        </button>
       </div>
       {
         ["messages", "groups"].includes(router.route) && (
@@ -76,6 +91,12 @@ export default function Navbar() {
       <div class="navbar-block">
         <GroupsDropdownNavbar groups={me.groups} />
       </div>
+      {tutorialActive && (
+        <HelpTutorial
+          onDone={() => setTutorialActive(false)}
+          TOUR_KEY={TOUR_KEY}
+        />
+      )}
     </div>
   );
 }

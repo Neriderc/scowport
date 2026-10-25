@@ -83,12 +83,12 @@
         }
     }
 
-    .feed-button {
+    .nav-button {
         color: inherit;
         line-height: 200%;
     }
 
-    .feed-active {
+    .nav-active {
         background-color: color.adjust($zusam-color, $hue: 5deg);
     }
 }

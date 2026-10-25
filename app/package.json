@@ -19,6 +19,7 @@
     "@nanostores/preact": "^1.0.0",
     "@parcel/core": "^2.15.4",
     "bootstrap": "^5.3.7",
+    "driver.js": "^1.10.2",
     "emoji-picker-react": "^4.13.2",
     "glightbox": "^3.3.1",
     "i18next": "^25.3.2",
