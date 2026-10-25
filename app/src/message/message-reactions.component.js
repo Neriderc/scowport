@@ -93,7 +93,7 @@ export default function MessageReactions(props) {
   };
 
   return (
-    <a className="d-flex action seamless-link font-size-90 capitalize" >
+    <a className="d-flex action seamless-link font-size-90 capitalize react-link" >
       {reactions.map(({ emoji, unified, count, users, currentUserReactionId }) => {
         const name = emojiMap[unified];
 

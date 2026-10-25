@@ -10,6 +10,7 @@ export default function GroupsDropdownNavbar() {
     <Fragment>
       {this.props.groups && (
         <div
+          id="groups-nav"
           class="nav-link dropdown groups unselectable"
           tabindex="-1"
           onClick={e => e.currentTarget.classList.toggle("active")}
@@ -17,12 +18,12 @@ export default function GroupsDropdownNavbar() {
           <div class="unselectable pr-1">
             {t("groups")} <FaIcon family={"solid"} icon={"caret-down"} />
           </div>
-          <div class="dropdown-menu dropdown-left">
+          <div id="nav-group-list" class="dropdown-menu dropdown-left">
             {this.props.groups.filter(e => !!e).map(e => (
               <Link
                 key={e.id}
                 to={`/groups/${e.id}`}
-                class="d-block seamless-link unselectable"
+                class="nav-group-item d-block seamless-link unselectable"
               >
                 {e.name}
               </Link>

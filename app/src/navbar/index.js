@@ -3,6 +3,8 @@ import _GroupSearchWrapper from "./group-search-wrapper.component.js";
 import _GroupsDropdownNavbar from "./groups-dropdown-navbar.component.js";
 import _Navbar from "./navbar.component.js";
 import _NotificationsDropdownNavbar from "./notifications-dropdown-navbar.component.js";
+import _HelpTutorial from "../navbar/help-tutorial.component.js";
+export const HelpTutorial = _HelpTutorial;
 
 export const GroupSearch = _GroupSearch;
 export const GroupSearchWrapper = _GroupSearchWrapper;
