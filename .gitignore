@@ -38,3 +38,7 @@ api/.php-cs-fixer.cache
 # DEV/TESTING
 /dev/posting/posting.env
 /dev/data
+dev/.env
+/dev/shlink
+/app/dist
+/app/dist

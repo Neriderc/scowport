@@ -7,6 +7,13 @@ WORKDIR /scowport
 #include "zusam-files.docker"
 #include "setup.docker"
 
+COPY container/shlink-proxy/package.json /scowport/shlink-proxy/package.json
+RUN cd /scowport/shlink-proxy && npm install --omit=dev
+COPY container/shlink-proxy/server.js /scowport/shlink-proxy/server.js
+
+COPY container/s6.d/shlink-proxy /etc/s6.d/shlink-proxy
+RUN chmod 755 /etc/s6.d/shlink-proxy/run
+
 EXPOSE 8080
 VOLUME /scowport/data
 CMD ["run.sh"]
