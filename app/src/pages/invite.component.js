@@ -1,5 +1,5 @@
 import { h } from "preact";
-import { me as meService, router } from "/src/core";
+import { me as meService, router, http } from "/src/core";
 import { Navbar } from "/src/navbar";
 import { useStore } from "@nanostores/preact";
 import { $me } from "/src/store/me.js";
@@ -52,7 +52,7 @@ export default function Invite() {
     selectedGroups.includes(group.id)
   );
 
-  const onGenerate = () => {
+  const onGenerate = async () => {
     const inviteData = selectedGroupObjects.map(group => [
       group.name,
       group.id,
@@ -72,10 +72,26 @@ export default function Invite() {
 
     const inviteUrl =
       `${window.location.origin}/invitation/${encoded}?e`;
+    
+    const url = await getShortUrl(inviteUrl) ?? inviteUrl;
+    
     const inviteKeyBox = document.getElementById("inviteKeyBox");
     if (inviteKeyBox) {
-      inviteKeyBox.value = inviteUrl;
+      inviteKeyBox.value = url;
     }
+  };
+
+  const getShortUrl = async (longUrl) => {
+    const response = await http.post("/api/shortlink", {                                                                                            
+      longUrl
+    }).catch(() => {
+      return;
+    }
+    );
+    if (!response?.shortUrl) {
+      return;
+    }
+    return response.shortUrl;
   };
 
 

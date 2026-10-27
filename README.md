@@ -28,8 +28,37 @@ Scowport is a web app for [Zusam](https://github.com/zusam/zusam). It started as
 - Adjustments to signup form to confirm email and enter your preferred name
 - Help icon on navigation bar starts an interactive tutorial
 
-## Deployment
+## Install
 
+Scowport is intended to be run alongside Zusam, as part of a Docker Compose stack. It also supports integration with Shlink for shorter invite URLs.
+
+To set up Scowport with all functions, first, copy the below example compose.yaml file. If you are already running Zusam, add the other services to your compose file, you should not need to adjust your Zusam service unless it is not called "zusam". Renaming the service is the easiest option, but you can adjust the Scowport environment variable ZUSAM_API_URL and the nginx config to keep the existing name (requires mapping the nginx config file in a volume to overwrite the one built with the image).
+
+```
+compose coming soon! See dev/compose.yaml in the meantime, but understand it's not designed for production use.
+```
+
+Start the stack:
+
+`docker compose up -d`
+
+Now generate the Shlink API key:
+
+`docker exec -it shlink shlink api-key:generate`
+
+Copy the API key into a new file called `.env` created in the same directory as the compose file as below. If this file already exists, add the value to the existing file. Also add a password for the Shlink database to use.
+
+```
+SHLINK_API_KEY=[API key here]
+HLINK_DB_PASSWORD=[add randomly generated password here]
+```
+
+Uncomment the volume for the sqlite database in the compose file. This is needed to persist the data, but if the bind mount is created before Shlink has created the database (i.e. the first time you run it) then Docker creates a directory instead of a file.
+
+Recreate scowport to load the API key:
+`docker compose up -d scowport`
+
+You should now be able to access Scowport. 
 
 ## Webapp compatibility
 

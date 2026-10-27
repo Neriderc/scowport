@@ -20,7 +20,55 @@ services:
       - '8102:8080'
     container_name: scowport
     environment:
-      - LANG=en_US
-      - DOMAIN=localhost
-      - APP_ENV=dev
+      - ZUSAM_API_URL=http://zusam:8080
+      - SHLINK_API_URL=http://shlink:8080/i
+      - SHLINK_API_KEY=${SHLINK_API_KEY}
+      - INVITE_APP_ORIGIN=http://localhost:8102
     image: scowport
+
+  shlink:
+    container_name: shlink
+    ports:
+      - 8080:8080
+    environment:
+      - DEFAULT_DOMAIN=localhost:8102
+      - BASE_PATH=/i
+      - IS_HTTPS_ENABLED=false
+      - GEOLITE_LICENSE_KEY=${SHLINK_GEOLITE_LICENSE_KEY}
+      - TZ="Pacific/Auckland"
+      - DB_DRIVER=postgres
+      - DB_USER=shlink
+      - DB_NAME=shlink
+      - DB_PASSWORD=${SHLINK_DB_PASSWORD}
+      - DB_HOST=shlink_db_postgres
+    image: shlinkio/shlink:stable
+    depends_on:
+      shlink_db_postgres:
+        condition: service_healthy
+  shlink_db_postgres:
+    container_name: shlink_db_postgres
+    image: postgres:16.3-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: shlink
+      POSTGRES_PASSWORD: "${SHLINK_DB_PASSWORD}"
+      POSTGRES_DB: shlink
+      PGDATA: /var/lib/postgresql/data/pgdata
+    volumes:
+      - ./shlink/postgres/data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U shlink -d shlink"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+      
+  shlink-web-client:
+    image: shlinkio/shlink-web-client
+    restart: always
+    container_name: shlink-gui
+    volumes:
+      - ./shlink/servers.json:/usr/share/nginx/html/servers.json
+    depends_on:
+      - shlink
+    ports:
+      - 8334:8080
