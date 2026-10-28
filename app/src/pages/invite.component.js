@@ -113,6 +113,8 @@ export default function Invite() {
       alert.add(JSON.stringify({ url: inviteUrl }));
 
     } catch (error) {
+      alert.add(JSON.stringify({ url: inviteUrl }));
+
       alert.add(t("failed_share") + " - " + error);
     }
   };

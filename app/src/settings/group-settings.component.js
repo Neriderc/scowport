@@ -1,21 +1,16 @@
 import { h } from "preact";
-import { alert, http, util, router, api, me as meService } from "/src/core";
-import { useStore } from "@nanostores/preact";
-import { $me } from "/src/store/me.js";
+import { alert, http, util, router, api } from "/src/core";
 import { useEffect, useState } from "preact/hooks";
 import { useTranslation } from "react-i18next";
 import { useNavigate, useParams } from "react-router-dom";
-import { showConfirm } from "/src/store/confirm-modal.js";
 import { leaveGroup} from "./group-helpers";
+import { FaIcon } from "/src/misc";
 
 export default function GroupSettings() {
 
   const params = useParams();
   const { t } = useTranslation();
-  const me = useStore($me);
   const navigate = useNavigate();
-  const [secretKey, setSecretKey] = useState("");
-  const [inviteKey, setInviteKey] = useState("");
   const [users, setUsers] = useState([]);
   const [group, setGroup] = useState({});
   const [alertMessage, setAlertMessage] = useState("");
@@ -25,8 +20,6 @@ export default function GroupSettings() {
       group => {
         if (!group) return;
         setGroup(group);
-        setSecretKey(group.secretKey);
-        setInviteKey(group.inviteKey);
         Promise.all(group.users.map(u => http.get(`/api/users/${u.id}`).catch(() => null).then(u => u))).then(
           users => setUsers(users.filter(u => u != null))
         );
@@ -41,26 +34,7 @@ export default function GroupSettings() {
     });
     setAlertMessage(t(router.getParam("alert")));
   }, []);
-
-  const resetInviteKey = async (event) => {
-    event.preventDefault();
-    if (await showConfirm({
-      title: t("are_you_sure"),
-      message: t("existing_invite_link_invalidated"),
-      confirmText: t("reset_invitation_link"),
-      cancelText: t("cancel"),
-      variant: "primary"
-    })) {
-      http
-        .post(`/api/groups/${group.id}/reset-invite-key`, {})
-        .then(res => {
-          if (!res) return;
-          alert.add(t("group_updated"));
-          setInviteKey(res["inviteKey"]);
-        }).catch(() => null);
-    }
-  };
-
+  
   const updateSettings = (event) => {
     event.preventDefault();
     const name = document.querySelector("#settings_form input[name='name']").value;
@@ -107,25 +81,13 @@ export default function GroupSettings() {
                   </form>
                   {api?.info?.show?.group_invitation_links && (
                     <form class="mb-1 border-bottom pb-1">
-                      <div class="form-group">
-                        <label for="inviteKey">
-                          {t("invitation_link")}:{" "}
-                        </label>
-                        <input
-                          type="text"
-                          name="inviteKey"
-                          value={
-                            `${window.location.protocol}//${window.location.host}/invitation/${inviteKey}`
-                          }
-                          class="form-control font-size-80"
-                          readonly="readonly"
-                        />
-                      </div>
                       <button
-                        class="btn btn-outline-secondary"
-                        onClick={resetInviteKey}
+                        type="button"
+                        class="btn btn-outline-primary"
+                        onClick={()=>navigate("/invite?group=" + params.id)}
                       >
-                        {t("reset_invitation_link")}
+                        <FaIcon family="solid" icon="users" />
+                        <span>{t("invite", "Invite to group")}</span>
                       </button>
                     </form>
                   )}
