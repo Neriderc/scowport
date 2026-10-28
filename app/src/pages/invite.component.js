@@ -110,6 +110,8 @@ export default function Invite() {
   const shareInviteUrl = async () => {
     try {
       await navigator.share({ url: inviteUrl });
+      alert.add(JSON.stringify({ url: inviteUrl }));
+
     } catch (error) {
       alert.add(t("failed_share") + " - " + error);
     }
