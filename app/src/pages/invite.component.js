@@ -109,7 +109,7 @@ export default function Invite() {
 
   const shareInviteUrl = async () => {
     try {
-      await navigator.canShare({ inviteUrl });
+      await navigator.share({ inviteUrl });
     } catch (error) {
       alert.add(t("failed_share") + " - " + error);
     }
