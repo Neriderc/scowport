@@ -74,7 +74,7 @@ export default function GroupSettings() {
                     </div>
                     <button
                       onClick={updateSettings}
-                      class="btn btn-outline-secondary"
+                      class="btn btn-outline-secondary mt-2"
                     >
                       {t("save_changes")}
                     </button>

@@ -105,13 +105,11 @@ export default function Invite() {
       alert.add(t("failed_copy") + " - " + error);
       setCopied(false);
     }
-    alert.add(JSON.stringify({ url: inviteUrl }));
-
   };
 
   const shareInviteUrl = async () => {
     try {
-      await navigator.share({ url: inviteUrl });
+      await navigator.share(JSON.stringify({ url: inviteUrl }));
       alert.add(JSON.stringify({ url: inviteUrl }));
 
     } catch (error) {
