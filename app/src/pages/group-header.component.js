@@ -82,7 +82,7 @@ export default function GroupHeader(props) {
                   onClick={()=>navigate("/invite?group=" + props.id)}
                 >
                   <FaIcon family="solid" icon="users" />
-                  <span>{t("invite", "Invite to group")}</span>
+                  <span>{t("invite_to_group")}</span>
                 </button>
                 <button
                   type="button"

@@ -87,7 +87,7 @@ export default function GroupSettings() {
                         onClick={()=>navigate("/invite?group=" + params.id)}
                       >
                         <FaIcon family="solid" icon="users" />
-                        <span>{t("invite", "Invite to group")}</span>
+                        <span class="ms-2">{t("invite_to_group")}</span>
                       </button>
                     </form>
                   )}
