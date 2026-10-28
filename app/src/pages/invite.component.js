@@ -87,17 +87,10 @@ export default function Invite() {
     const response = await http.post("/api/shortlink", {                                                                                            
       longUrl
     }).catch((e) => {
-      let str = JSON.stringify(e, null, 4);
-      alert.add(str);
-
       return;
     }
     );
     if (!response?.shortUrl) {
-      let str = JSON.stringify(response, null, 4);
-
-      alert.add(str + " " + longUrl);
-
       return;
     }
     return response.shortUrl;
@@ -111,6 +104,14 @@ export default function Invite() {
     } catch (error) {
       alert.add(t("failed_copy") + " - " + error);
       setCopied(false);
+    }
+  };
+
+  const shareInviteUrl = async () => {
+    try {
+      await navigator.canShare({ inviteUrl });
+    } catch (error) {
+      alert.add(t("failed_share") + " - " + error);
     }
   };
   return (
@@ -222,7 +223,7 @@ export default function Invite() {
                     {inviteUrl && (
                       <div class="mt-4">
                         <label for="invite-key-box" class="form-label fw-semibold">
-                          {t("invitation_link")}
+                          {t("share_invite_link")}
                         </label>
 
                         <div class="input-group input-group-lg pb-3">
@@ -238,6 +239,7 @@ export default function Invite() {
                             <button
                               type="button"
                               class="btn btn-primary"
+                              onClick={shareInviteUrl}
                             >
                               <FaIcon family="solid" icon="share-nodes" />{" "}
                               {t("share")}
