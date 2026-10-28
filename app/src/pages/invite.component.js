@@ -1,5 +1,5 @@
-import { h } from "preact";
-import { me as meService, router, http } from "/src/core";
+import { h, Fragment } from "preact";
+import { me as meService, router, http, alert } from "/src/core";
 import { Navbar } from "/src/navbar";
 import { useStore } from "@nanostores/preact";
 import { $me } from "/src/store/me.js";
@@ -13,7 +13,10 @@ export default function Invite() {
   const me = useStore($me);
   const [loaded, setLoaded] = useState(false);
   const [selectedGroups, setSelectedGroups] = useState([]);
-
+  const [inviteUrl, setInviteUrl] = useState("");
+  const [copied, setCopied] = useState(false);
+  const [shareData, setShareData] = useState(null);
+  
   useEffect(() => {
     setTimeout(() => {
       meService.fetch().then(user => {
@@ -70,31 +73,46 @@ export default function Invite() {
       .replace(/\//g, "_")
       .replace(/=+$/, "");
 
-    const inviteUrl =
-      `${window.location.origin}/invitation/${encoded}?e`;
-    
-    const url = await getShortUrl(inviteUrl) ?? inviteUrl;
-    
-    const inviteKeyBox = document.getElementById("inviteKeyBox");
-    if (inviteKeyBox) {
-      inviteKeyBox.value = url;
+    const longUrl = `${window.location.origin}/invitation/${encoded}?e`;
+    const url = (await getShortUrl(longUrl)) ?? longUrl;
+
+    setInviteUrl(url);
+    if (navigator?.canShare && navigator.canShare({ url })) {
+      setShareData({url});
     }
+    setCopied(false);
   };
 
   const getShortUrl = async (longUrl) => {
     const response = await http.post("/api/shortlink", {                                                                                            
       longUrl
-    }).catch(() => {
+    }).catch((e) => {
+      let str = JSON.stringify(e, null, 4);
+      alert.add(str);
+
       return;
     }
     );
     if (!response?.shortUrl) {
+      let str = JSON.stringify(response, null, 4);
+
+      alert.add(str + " " + longUrl);
+
       return;
     }
     return response.shortUrl;
   };
 
-
+  const copyInviteUrl = async () => {
+    try {
+      await navigator.clipboard.writeText(inviteUrl);
+      alert.add(t("copied_to_clipboard"));
+      setCopied(true);
+    } catch (error) {
+      alert.add(t("failed_copy") + " - " + error);
+      setCopied(false);
+    }
+  };
   return (
     <main>
       <Navbar />
@@ -200,20 +218,53 @@ export default function Invite() {
                         {t("create_invitation_link")}
                       </button>
                     </div>
-
-                    <form class="mb-1 border-bottom pb-1">
-                      <div class="form-group">
-                        <label for="inviteKey">
-                          {t("invitation_link")}:{" "}
+                    
+                    {inviteUrl && (
+                      <div class="mt-4">
+                        <label for="invite-key-box" class="form-label fw-semibold">
+                          {t("invitation_link")}
                         </label>
-                        <input
-                          type="text"
-                          id="inviteKeyBox"
-                          class="form-control font-size-80"
-                          readonly="readonly"
-                        />
+
+                        <div class="input-group input-group-lg pb-3">
+                          <input
+                            type="text"
+                            id="invite-key-box"
+                            class="form-control font-size-80"
+                            value={inviteUrl}
+                            readOnly
+                            aria-label={t("invitation_link")}
+                          />
+                          {shareData ? (
+                            <button
+                              type="button"
+                              class="btn btn-primary"
+                            >
+                              <FaIcon family="solid" icon="share-nodes" />{" "}
+                              {t("share")}
+                            </button>
+                          ) : !navigator?.clipboard ? "" : (
+                            <button
+                              type="button"
+                              class={`btn ${copied ? "btn-success" : "btn-primary"}`}
+                              onClick={copyInviteUrl}
+                              disabled={!inviteUrl}
+                            >
+                              {copied ? (
+                                <>
+                                  <FaIcon family="solid" icon="check" />{" "}
+                                  {t("copied")}
+                                </>
+                              ) : (
+                                <>
+                                  <FaIcon family="solid" icon="copy" />{" "}
+                                  {t("copy")}
+                                </>
+                              )}
+                            </button>
+                          )}
+                        </div>
                       </div>
-                    </form>
+                    )}
                   </div>
                 ) : (
                   <p class="text-muted">
