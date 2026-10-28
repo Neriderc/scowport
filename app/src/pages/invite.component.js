@@ -106,12 +106,16 @@ export default function Invite() {
       setCopied(false);
     }
   };
-
+  
   const shareInviteUrl = async () => {
     try {
       await navigator.share({ url: inviteUrl });
     } catch (error) {
-      alert.add(t("failed_share") + " - " + error);
+      if (error.name === "AbortError") {
+        return;
+      }
+
+      alert.add(`${t("failed_share")}`);
     }
   };
   return (
