@@ -38,6 +38,12 @@ To set up Scowport with all functions, first, copy the below example compose.yam
 compose coming soon! See dev/compose.yaml in the meantime, but understand it's not designed for production use.
 ```
 
+To prevent docker mounting issues, we need to create the Shlink servers file first:
+
+```
+mkdir shlink && touch servers.json
+```
+
 Start the stack:
 
 `docker compose up -d`
@@ -52,8 +58,6 @@ Copy the API key into a new file called `.env` created in the same directory as 
 SHLINK_API_KEY=[API key here]
 HLINK_DB_PASSWORD=[add randomly generated password here]
 ```
-
-Uncomment the volume for the sqlite database in the compose file. This is needed to persist the data, but if the bind mount is created before Shlink has created the database (i.e. the first time you run it) then Docker creates a directory instead of a file.
 
 Recreate scowport to load the API key:
 `docker compose up -d scowport`
