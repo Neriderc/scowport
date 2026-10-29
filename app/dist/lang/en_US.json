@@ -39,7 +39,7 @@
     "error_new_message": "An error occurred while sending your message.",
     "error_upload": "An error occurred during the upload",
     "failed_copy": "Failed to copy to the clipboard. Select the link and copy it manually",
-    "failed_share": "Failed to open the share window. Select the link and share it manually",
+    "failed_share": "Failed to open the share window. Please refresh the page and try again.",
     "feed": "Feed",
     "feed_group": "My Feed",
     "forgot_password": "Forgot your password?",

@@ -79,8 +79,9 @@ export default function GroupSettings() {
                       {t("save_changes")}
                     </button>
                   </form>
-                  {api?.info?.show?.group_invitation_links && (
-                    <form class="mb-1 border-bottom pb-1">
+
+                  <form>
+                    {api?.info?.show?.group_invitation_links && (
                       <button
                         type="button"
                         class="btn btn-outline-primary"
@@ -89,12 +90,10 @@ export default function GroupSettings() {
                         <FaIcon family="solid" icon="users" />
                         <span class="ms-2">{t("invite_to_group")}</span>
                       </button>
-                    </form>
-                  )}
-                  <form>
+                    )}
                     <button
                       onClick={e => leaveGroup(e, group, navigate, t)}
-                      class="btn btn-outline-danger"
+                      class="btn btn-outline-danger ms-2"
                     >
                       {t("quit_group")}
                     </button>
