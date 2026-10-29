@@ -8,6 +8,7 @@ import { useStore } from "@nanostores/preact";
 import { useTranslation } from "react-i18next";
 import { leaveGroup } from "../settings/group-helpers";
 import { useEffect, useState } from "preact/hooks";
+import { showConfirm } from "/src/store/confirm-modal.js";
 
 export default function GroupInviteBoard() {
   const navigate = useNavigate();
@@ -135,11 +136,19 @@ export default function GroupInviteBoard() {
     });
   };
 
-  const onContinue = () => {
-    if (inviteGroups.length > 1) {
-      navigate("/feed");
-    } else {
-      navigate(`/groups/${inviteGroups[0].groupId}`);
+  const onContinue = async () => {
+    if (!inviteGroups.some(group => !isMember(group.groupId)) || await showConfirm({
+      title: t("are_you_sure"),
+      message: t("continue_not_all_groups"),
+      confirmText: t("continue"),
+      cancelText: t("cancel"),
+      variant: "success"
+    })) {
+      if (inviteGroups.length > 1) {
+        navigate("/feed");
+      } else {
+        navigate(`/groups/${inviteGroups[0].groupId}`);
+      }
     }
   };
 
