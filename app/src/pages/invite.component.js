@@ -97,6 +97,7 @@ export default function Invite() {
   };
 
   const copyInviteUrl = async () => {
+    return shareInviteUrl();
     try {
       await navigator.clipboard.writeText(inviteUrl);
       alert.add(t("copied_to_clipboard"));
@@ -108,13 +109,13 @@ export default function Invite() {
   };
 
   const shareInviteUrl = async () => {
-    alert("Share button clicked");
+    window.alert("Share button clicked");
     try {
       await navigator.share({ url: inviteUrl });
-      alert("Share end");
+      window.alert("Share end");
     } catch (error) {
       alert(error);
-      alert.add(t("failed_share") + " - " + error);
+      window.alert.add(t("failed_share") + " - " + error);
     }
   };
   return (
