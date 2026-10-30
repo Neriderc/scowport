@@ -82,15 +82,17 @@ export default function GroupHeader(props) {
                   onClick={()=>navigate("/invite?group=" + props.id)}
                 >
                   <FaIcon family="solid" icon="users" />
-                  <span>{t("invite_to_group")}</span>
+                  <span class="d-none d-md-inline">{t("invite_to_group")}</span>
+                  <span class="d-inline d-md-none">{t("invite")}</span>
                 </button>
                 <button
                   type="button"
                   class="btn btn-outline-danger"
                   onClick={e => leaveGroup(e, group, navigate, t)}
                 >
-                  <FaIcon family="solid" icon="user-minus" />
-                  <span>{t("quit_group")}</span>
+                  <FaIcon family="regular" icon="right-from-bracket" />
+                  <span class="d-none d-md-inline">{t("quit_group")}</span>
+                  <span class="d-inline d-md-none">{t("leave")}</span>
                 </button>
               </>
             ) : (
@@ -106,7 +108,7 @@ export default function GroupHeader(props) {
             {props.isMember && (
               <button
                 type="button"
-                class="btn btn-outline-secondary"
+                class="btn btn-outline-secondary cog"
                 onClick={() => props.onSettings?.(group)}
               >
                 <FaIcon family="solid" icon="cog" fontSize="2rem" />
