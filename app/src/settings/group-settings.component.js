@@ -88,14 +88,18 @@ export default function GroupSettings() {
                         onClick={()=>navigate("/invite?group=" + params.id)}
                       >
                         <FaIcon family="solid" icon="users" />
-                        <span class="ms-2">{t("invite_to_group")}</span>
+                        <span class="d-none d-md-inline ms-2">{t("invite_to_group")}</span>
+                        <span class="d-inline d-md-none ms-2">{t("invite")}</span>
                       </button>
                     )}
                     <button
-                      onClick={e => leaveGroup(e, group, navigate, t)}
+                      type="button"
                       class="btn btn-outline-danger ms-2"
+                      onClick={e => leaveGroup(e, group, navigate, t)}
                     >
-                      {t("quit_group")}
+                      <FaIcon family="regular" icon="right-from-bracket" />
+                      <span class="d-none d-md-inline ms-2">{t("quit_group")}</span>
+                      <span class="d-inline d-md-none ms-2">{t("leave")}</span>
                     </button>
                   </form>
                 </div>
