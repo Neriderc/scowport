@@ -108,10 +108,8 @@ export default function Invite() {
   };
   
   const shareInviteUrl = async () => {
-    window.alert("Share button clicked");
     try {
       await navigator.share({ url: inviteUrl });
-      window.alert("Share end");
     } catch (error) {
       if (error.name === "AbortError") {
         return;
