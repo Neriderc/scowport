@@ -63,6 +63,10 @@ export default function GroupInviteBoard() {
     } catch (error) {
       invalidInvite = true;
     }
+  } else {
+    http.post(`/api/groups/invitation/${params.id}`, {}).catch(() => null).then(res => {
+      if (res) navigate(res.group ? "/groups/" + res.group : "/");
+    });
   }
 
   const isMember = groupId =>
@@ -153,28 +157,26 @@ export default function GroupInviteBoard() {
   };
 
   useEffect(() => {
-    if (!isEncodedInvite && params.id) {
-      http.post(
-        `/api/groups/invitation/${params.id}`,
-        {}
-      ).then(res => {
-        if (res?.group) {
-          navigate("/groups/" + res.group);
-        }
-      }).catch(error => {
-        console.error("Failed to process invitation:", error);
-      });
-    }
-  }, []);
-
-  useEffect(() => {
     meService.fetch().then(user => {
-      if (!user) {
+      if (user) { 
+        if (!isEncodedInvite && params.id) {
+          http.post(
+            `/api/groups/invitation/${params.id}`,
+            {}
+          ).then(res => {
+            if (res?.group) {
+              navigate("/groups/" + res.group);
+            }
+          }).catch(error => {
+            console.error("Failed to process invitation:", error);
+          });
+        }
+      }  else {
         let path;
         if (isEncodedInvite) {
           path = `/signup?inviteKey=${inviteGroups[0].inviteKey}&encodedInvite=${params.id}`;
         } else {
-          path = `/signup?inviteKey=${inviteGroups[0].inviteKey}`;
+          path = `/signup?inviteKey=${params.id}`;
         }
         navigate(path);
       }
