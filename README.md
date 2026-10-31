@@ -52,11 +52,12 @@ Now generate the Shlink API key:
 
 `docker exec -it shlink shlink api-key:generate`
 
-Copy the API key into a new file called `.env` created in the same directory as the compose file as below. If this file already exists, add the value to the existing file. Also add a password for the Shlink database to use.
+Copy the API key into a new file called `.env` created in the same directory as the compose file as below. If this file already exists, add the value to the existing file. Also add a password for the Shlink database to use, and if you have one, a geolite licence key (see Shlink docs, keys are free).
 
 ```
 SHLINK_API_KEY=[API key here]
-HLINK_DB_PASSWORD=[add randomly generated password here]
+SHLINK_DB_PASSWORD=[add randomly generated password here]
+SHLINK_GEOLITE_LICENSE_KEY=[geolite key here]
 ```
 
 Recreate scowport to load the API key:
