@@ -1,4 +1,4 @@
-import { h, Fragment } from "preact";
+import React, { useEffect, useState } from "react";
 import { http, api, me, notifications, bookmarks_utils, router, storage, NetworkError } from "/src/core";
 import {
   Login,
@@ -19,7 +19,6 @@ import {
   useNavigate,
   useLocation,
 } from "react-router-dom";
-import { useEffect, useState } from "preact/hooks";
 import ConfirmModal from "/src/misc/confirm-modal.component.js";
 import i18n from "i18next";
 import { Invite } from "./pages";
@@ -70,11 +69,12 @@ function App() {
     bookmarks_utils.update();
 
     // manage dropdowns
-    window.addEventListener("click", e => toggleDropdowns(e));
+    const handleClick = e => toggleDropdowns(e);
+    window.addEventListener("click", handleClick);
     return () => {
-      window.removeEventListener("click", e => toggleDropdowns(e));
+      window.removeEventListener("click", handleClick);
     };
-  });
+  }, []);
 
   useEffect(() => {
     const newLang = userLang || defaultLang;

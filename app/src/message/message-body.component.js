@@ -1,7 +1,6 @@
-import { h } from "preact";
+import React, { useEffect, useState, useRef } from "react";
 import { http, util, api } from "/src/core";
 import { EmbedBlock, FileGrid } from "/src/embed";
-import { useEffect, useState, useRef } from "preact/hooks";
 import QuillReadOnly from "../quill/quill-read-only.component";
 import { parseMessage } from "../quill/quill-common";
 export default function MessageBody(props) {
@@ -68,16 +67,16 @@ export default function MessageBody(props) {
     }
   }, [preview, props.message]);
   return (
-    <div class="message-body">
+    <div className="message-body">
       {props.message.data && props.message.data.title && (
-        <div class="title">
+        <div className="title">
           <span>{props.message.data.title}</span>
         </div>
       )}
       {props.message.data &&
         props.message.data.text &&
         props.message.data.text.trim() && (
-        <div class="card-text" >
+        <div className="card-text" >
           {quillData.type === "rich_text" ? (
             <QuillReadOnly
               editorRef={quill => { readOnlyRefs.current[props.message.id] = quill; }}

@@ -1,9 +1,8 @@
-import { h } from "preact";
+import React, { useEffect, useState, useRef } from "react";
 import { alert, http, util, me } from "/src/core";
 import { useTranslation } from "react-i18next";
 import { WritingWidget } from "/src/writer";
 import { useNavigate } from "react-router-dom";
-import { useState, useEffect, useRef } from "preact/hooks";
 
 // trick from https://stackoverflow.com/a/53837442
 function useForceUpdate() {
@@ -166,6 +165,7 @@ export default function Writer(props) {
         type = "rich_text";
       }
     } catch {
+      console.log("test");
       type = "standard";
     }
     let msg = {

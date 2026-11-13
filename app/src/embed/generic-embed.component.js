@@ -1,13 +1,13 @@
-import { h, Component } from "preact";
+import React, { Component } from "react";
 
 export default class GenericEmbed extends Component {
   render() {
     if (this.state.revealed) {
       return (
-        <div class="embed-responsive embed-responsive-16by9">
+        <div className="embed-responsive embed-responsive-16by9">
           <iframe
             allowfullscreen
-            class="embed-responsive-item"
+            className="embed-responsive-item"
             referrerpolicy="strict-origin-when-cross-origin"
             src={this.props.url}
           />
@@ -16,7 +16,7 @@ export default class GenericEmbed extends Component {
     }
     return (
       <div
-        class="embed-preview"
+        className="embed-preview"
         onClick={() => this.setState({revealed: true})}
       >
         <div className={this.props.playBtnClass} />

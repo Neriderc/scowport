@@ -1,4 +1,4 @@
-import { h } from "preact";
+import React from "react";
 import { router } from "/src/core";
 import { FaIcon } from "/src/misc";
 import { useNavigate } from "react-router-dom";
@@ -35,18 +35,18 @@ export default function Search() {
   }
 
   return (
-    <form class="navbar-block search-block" onSubmit={e => search(e)}>
-      <div class="input-group">
+    <form className="navbar-block search-block" onSubmit={e => search(e)}>
+      <div className="input-group">
         <input
-          class="form-control"
+          className="form-control"
           type="text"
           id="search"
           placeholder={t("search_in_group")}
-          value={router.getParam("q").replace(/\+/g, " ")}
+          defaultValue={router.getParam("q").replace(/\+/g, " ")}
         />
-        <div class="input-group-append">
+        <div className="input-group-append">
           <button
-            class="btn btn-secondary"
+            className="btn btn-secondary"
             type="submit"
           >
             <FaIcon family={"solid"} icon={"search"} />

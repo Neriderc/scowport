@@ -1,8 +1,8 @@
-import { h } from "preact";
+import React from "react";
+import { useStore } from "@nanostores/react";
 import { notifications as notifs } from "/src/core";
 import { FaIcon } from "/src/misc";
 import { Notification } from "/src/pages";
-import { useStore } from "@nanostores/preact";
 import { $notifications } from "/src/store/notifications.js";
 import { useTranslation } from "react-i18next";
 
@@ -20,26 +20,26 @@ export default function NotificationsDropdownNavbar() {
         `menu dropdown${notifications.length ? " cursor-pointer" : ""}`
       }
       title={t("notifications")}
-      tabindex="-1"
+      tabIndex="-1"
       onClick={e =>
         notifications.length &&
         e.currentTarget.classList.toggle("active")
       }
     >
-      <div class="unselectable button-with-count">
+      <div className="unselectable button-with-count">
         <FaIcon
           family={notifications.length ? "solid" : "regular"}
           icon={"bell"}
         />
         {!!notifications.filter(n => !n.read).length && (
-          <div class="unread-badge" />
+          <div className="unread-badge" />
         )}
       </div>
-      <div class="dropdown-menu dropdown-right notifications-menu">
-        <div class="notification-header">
-          <strong class="capitalize">{t("notifications")}</strong>
+      <div className="dropdown-menu dropdown-right notifications-menu">
+        <div className="notification-header">
+          <strong className="capitalize">{t("notifications")}</strong>
           <div
-            class="action capitalize"
+            className="action capitalize"
             onClick={() => {
               notifs.markAllNotificationsAsRead();
             }}

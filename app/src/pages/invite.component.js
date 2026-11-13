@@ -1,10 +1,9 @@
-import { h, Fragment } from "preact";
+import React, { Fragment, useEffect, useState } from "react";
+import { useStore } from "@nanostores/react";
 import { me as meService, router, http, alert } from "/src/core";
 import { Navbar } from "/src/navbar";
-import { useStore } from "@nanostores/preact";
 import { $me } from "/src/store/me.js";
 import { useTranslation } from "react-i18next";
-import { useEffect, useState } from "preact/hooks";
 import { FaIcon } from "/src/misc";
 
 export default function Invite() {
@@ -121,34 +120,34 @@ export default function Invite() {
   return (
     <main>
       <Navbar />
-      <div class="content">
-        <div class="header-container container-fluid">
+      <div className="content">
+        <div className="header-container container-fluid">
           <section
-            class="header-section"
+            className="header-section"
             aria-label={t("invite_someone")}
           >
-            <div class="group-header-main">
-              <div class="group-header-avatar">
-                <span class="group-header-avatar-placeholder">
+            <div className="group-header-main">
+              <div className="group-header-avatar">
+                <span className="group-header-avatar-placeholder">
                   <FaIcon family="solid" icon="users" />
                 </span>
               </div>
 
-              <div class="group-header-info">
-                <h1 class="group-header-name">
+              <div className="group-header-info">
+                <h1 className="group-header-name">
                   {t("invite_someone")}
                 </h1>
-                <div class="group-header-members">
-                  <span class="w-75">
+                <div className="group-header-members">
+                  <span className="w-75">
                     {t("invite_create_page_explanation")}
                   </span>
                 </div>
               </div>
             </div>
                       
-            <div class="container-fluid">
+            <div className="container-fluid">
               <section
-                class="invite-groups mt-3"
+                className="invite-groups mt-3"
                 aria-labelledby="invite-groups-heading"
               >
                 <h2 id="invite-groups-heading">
@@ -164,26 +163,26 @@ export default function Invite() {
 
                 {groups.length > 0 ? (
                   <div>
-                    <div class="list-group invite-group-list">
+                    <div className="list-group invite-group-list">
                       {groups.map(group => (
                         <label
                           key={group.id}
-                          class="list-group-item d-flex align-items-center gap-2"
+                          className="list-group-item d-flex align-items-center gap-2"
                         >
                           <input
                             type="checkbox"
-                            class="form-check-input mt-0"
+                            className="form-check-input mt-0"
                             checked={selectedGroups.includes(group.id)}
                             onChange={event =>
                               toggleGroup(group.id, event.currentTarget.checked)
                             }
                           />
 
-                          <span class="flex-grow-1 ps-2 pe-5">
+                          <span className="flex-grow-1 ps-2 pe-5">
                             {group.name}
                           </span>
 
-                          <small class="text-muted">
+                          <small className="text-muted">
                             {t("member_count", {
                               count: group.users?.length ?? 0,
                               defaultValue: `${group.users?.length ?? 0} members`
@@ -193,14 +192,14 @@ export default function Invite() {
                       ))}
                     </div>
 
-                    <div class="mt-3 d-flex align-items-center flex-wrap gap-2">
+                    <div className="mt-3 d-flex align-items-center flex-wrap gap-2">
                       <span>
                         {selectedGroups.length + " " + t("selected")}
                       </span>
 
                       <button
                         type="button"
-                        class="btn btn-outline-secondary btn-sm"
+                        className="btn btn-outline-secondary btn-sm"
                         onClick={() => setSelectedGroups(
                           selectedGroups.length === groups.length
                             ? []
@@ -213,10 +212,10 @@ export default function Invite() {
                       </button>
                     </div>
 
-                    <div class="m-4">
+                    <div className="m-4">
                       <button
                         type="button"
-                        class="btn btn-primary"
+                        className="btn btn-primary"
                         disabled={selectedGroupObjects.length === 0}
                         onClick={onGenerate}
                       >
@@ -225,16 +224,16 @@ export default function Invite() {
                     </div>
                     
                     {inviteUrl && (
-                      <div class="mt-4">
-                        <label for="invite-key-box" class="form-label fw-semibold">
+                      <div className="mt-4">
+                        <label for="invite-key-box" className="form-label fw-semibold">
                           {t("share_invite_link")}
                         </label>
 
-                        <div class="input-group input-group-lg pb-3">
+                        <div className="input-group input-group-lg pb-3">
                           <input
                             type="text"
                             id="invite-key-box"
-                            class="form-control font-size-80"
+                            className="form-control font-size-80"
                             value={inviteUrl}
                             readOnly
                             aria-label={t("invitation_link")}
@@ -242,7 +241,7 @@ export default function Invite() {
                           {shareData ? (
                             <button
                               type="button"
-                              class="btn btn-primary"
+                              className="btn btn-primary"
                               onClick={shareInviteUrl}
                             >
                               <FaIcon family="solid" icon="share-nodes" />{" "}
@@ -251,7 +250,7 @@ export default function Invite() {
                           ) : !navigator?.clipboard ? "" : (
                             <button
                               type="button"
-                              class={`btn ${copied ? "btn-success" : "btn-primary"}`}
+                              className={`btn ${copied ? "btn-success" : "btn-primary"}`}
                               onClick={copyInviteUrl}
                               disabled={!inviteUrl}
                             >
@@ -273,7 +272,7 @@ export default function Invite() {
                     )}
                   </div>
                 ) : (
-                  <p class="text-muted">
+                  <p className="text-muted">
                     {t("no_groups")}
                   </p>
                 )}

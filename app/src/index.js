@@ -1,4 +1,5 @@
-import { h, render } from "preact";
+import React from "react";
+import { createRoot } from "react-dom/client";
 import App from "./app.js";
 import {
   createBrowserRouter,
@@ -15,9 +16,7 @@ const router = createBrowserRouter(
 );
 
 function Index() {
-  return (
-    <RouterProvider router={router} />
-  );
+  return <RouterProvider router={router} />;
 }
 
-render(<Index />, document.body);
+createRoot(document.body).render(<Index />);

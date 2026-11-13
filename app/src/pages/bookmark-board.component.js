@@ -1,8 +1,8 @@
-import { h } from "preact";
+import React from "react";
+import { useStore } from "@nanostores/react";
 import { MessagePreview } from "/src/message";
 import { Navbar } from "/src/navbar";
 import { useTranslation } from "react-i18next";
-import { useStore } from "@nanostores/preact";
 import { $bookmarks } from "/src/store/bookmarks.js";
 
 export default function BookmarkBoard() {
@@ -13,9 +13,9 @@ export default function BookmarkBoard() {
     return (
       <main>
         <Navbar />
-        <div class="content">
-          <article id="group" class="justify-content-center d-flex">
-            <div class="message-container container-fluid d-flex justify-content-center flex-wrap">
+        <div className="content">
+          <article id="group" className="justify-content-center d-flex">
+            <div className="message-container container-fluid d-flex justify-content-center flex-wrap">
               {t("you_have_no_bookmarks")}
             </div>
           </article>
@@ -31,13 +31,13 @@ export default function BookmarkBoard() {
   return (
     <main>
       <Navbar />
-      <div class="content">
-        <article id="group" class="justify-content-center d-flex">
-          <div class="message-container container-fluid d-flex justify-content-center flex-wrap">
+      <div className="content">
+        <article id="group" className="justify-content-center d-flex">
+          <div className="message-container container-fluid d-flex justify-content-center flex-wrap">
             {bookmarks.map((b, i) => {
               return (
                 <MessagePreview
-                  tabindex={i + 1}
+                  tabIndex={i + 1}
                   key={b.message.id}
                   id={b.message.id}
                 />

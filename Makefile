@@ -10,12 +10,21 @@ nothing:
 	@echo "Available targets: $(TARGETS)"
 
 dev:
+	make compile-webapp-dev
 	cpp -o Dockerfile container/dockerfile/dev.docker
 	$(CONTAINER_PGRM) build -t $(DEV_OCI_IMAGE) -f Dockerfile .
 
 prod:
 	cpp -o Dockerfile container/dockerfile/prod.docker
 	$(CONTAINER_PGRM) build -t $(PROD_OCI_IMAGE) -f Dockerfile .
+
+compile-webapp-dev:
+	cd app
+	mkdir -p dist
+	rm -rf ../public/*.{js,css,map,png}
+	npm install --save-dev
+	NODE_ENV=development npm run build
+	cp -r dist/* ../public/
 
 compile-webapp-local:
 	cd app

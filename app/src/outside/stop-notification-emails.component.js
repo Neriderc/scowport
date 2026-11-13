@@ -1,4 +1,5 @@
-import { h, Component } from "preact";
+import React, { Component } from "react";
+
 import { http } from "/src/core";
 import { withTranslation } from "react-i18next";
 

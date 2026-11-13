@@ -1,13 +1,12 @@
-import { h, Fragment } from "preact";
+import React, { Fragment, useEffect, useState } from "react";
+import { useStore } from "@nanostores/react";
 import { FaIcon } from "/src/misc";
 import { Navbar } from "/src/navbar";
 import { useParams, useSearchParams, useNavigate } from "react-router-dom";
 import { http, me as meService } from "/src/core";
 import { $me } from "/src/store/me.js";
-import { useStore } from "@nanostores/preact";
 import { useTranslation } from "react-i18next";
 import { leaveGroup } from "../settings/group-helpers";
-import { useEffect, useState } from "preact/hooks";
 import { showConfirm } from "/src/store/confirm-modal.js";
 
 export default function GroupInviteBoard() {
@@ -186,33 +185,33 @@ export default function GroupInviteBoard() {
     <main>
       <Navbar />
 
-      <div class="content">
-        <div class="header-container container-fluid">
+      <div className="content">
+        <div className="header-container container-fluid">
           <section
-            class="header-section"
+            className="header-section"
             aria-label={t("invite_someone")}
           >
-            <div class="group-header-main">
-              <div class="group-header-avatar">
-                <span class="group-header-avatar-placeholder">
+            <div className="group-header-main">
+              <div className="group-header-avatar">
+                <span className="group-header-avatar-placeholder">
                   <FaIcon family="solid" icon="users" />
                 </span>
               </div>
 
-              <div class="group-header-info">
+              <div className="group-header-info">
                 {inviteGroups.length === 1 ? (
                   <>
-                    <h1 class="group-header-name">
-                      {t("invite_name")} <strong class="text-primary">{inviteGroups[0].name}</strong>
+                    <h1 className="group-header-name">
+                      {t("invite_name")} <strong className="text-primary">{inviteGroups[0].name}</strong>
                     </h1>
                   </>) : (
                   <>
-                    <h1 class="group-header-name">
+                    <h1 className="group-header-name">
                       {t("invite_noname")}
                     </h1>
                 
-                    <div class="group-header-members">
-                      <span class="w-75">
+                    <div className="group-header-members">
+                      <span className="w-75">
                         {t("invite_join_page_explanation")}
                       </span>
                     </div>
@@ -221,9 +220,9 @@ export default function GroupInviteBoard() {
               </div>
             </div>
 
-            <div class="container-fluid">
+            <div className="container-fluid">
               <section
-                class="invite-groups"
+                className="invite-groups"
                 aria-labelledby="invite-groups-heading"
               >
                 {inviteGroups.length === 1 ? "" : (
@@ -234,10 +233,10 @@ export default function GroupInviteBoard() {
                 
                 {!invalidInvite ? (
                   inviteGroups.length === 1 ? (
-                    <div class="mb-3 text-end">
+                    <div className="mb-3 text-end">
                       <button
                         type="button"
-                        class="btn btn-primary p-3 fs-4"
+                        className="btn btn-primary p-3 fs-4"
                         onClick={onSingleGroupClick}
                       >
                         {t("join_group")}
@@ -247,19 +246,19 @@ export default function GroupInviteBoard() {
                     <>
 
 
-                      <div class="list-group invite-group-list mb-3">
+                      <div className="list-group invite-group-list mb-3">
                         {inviteGroups.some(group => !isMember(group.groupId)) && (
-                          <div class="d-flex justify-content-end mb-3">
+                          <div className="d-flex justify-content-end mb-3">
                             <button
                               type="button"
-                              class="btn btn-primary"
+                              className="btn btn-primary"
                               onClick={onJoinAll}
                               disabled={joiningAll}
                             >
                               {joiningAll ? (
                                 <>
                                   <span
-                                    class="spinner-border spinner-border-sm me-2"
+                                    className="spinner-border spinner-border-sm me-2"
                                     aria-hidden="true"
                                   />
                                   {t("joining_groups")}
@@ -282,15 +281,15 @@ export default function GroupInviteBoard() {
                           return (
                             <div
                               key={group.groupId}
-                              class="list-group-item d-flex align-items-center gap-3"
+                              className="list-group-item d-flex align-items-center gap-3"
                             >
-                              <span class="flex-grow-1 fs-5">
+                              <span className="flex-grow-1 fs-5">
                                 {group.name}
                               </span>
 
                               <button
                                 type="button"
-                                class={`btn ${
+                                className={`btn ${
                                   joined
                                     ? "btn-outline-success"
                                     : "btn-primary"
@@ -309,10 +308,10 @@ export default function GroupInviteBoard() {
                         })}
 
                       </div>
-                      <div class="mt-3 mb-3">
+                      <div className="mt-3 mb-3">
                         <button
                           type="button"
-                          class="btn btn-primary"
+                          className="btn btn-primary"
                           onClick={onContinue}
                         >
                           {t("continue")}
@@ -321,13 +320,13 @@ export default function GroupInviteBoard() {
                     </>
                   )) : (
                   <>
-                    <p class="text-muted">
+                    <p className="text-muted">
                       {t("invalid_token_error")}
                     </p>
-                    <div class="m-4">
+                    <div className="m-4">
                       <button
                         type="button"
-                        class="btn btn-primary"
+                        className="btn btn-primary"
                         onClick={onContinue}
                       >
                         {t("continue")}

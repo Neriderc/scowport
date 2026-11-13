@@ -1,7 +1,6 @@
-import { h } from "preact";
+import React, { useEffect, useState } from "react";
 import { router, util } from "/src/core";
 import MessageChild from "./message-child.component.js";
-import { useEffect, useState } from "preact/hooks";
 import { useTranslation } from "react-i18next";
 
 export default function MessageChildren(props) {
@@ -59,11 +58,11 @@ export default function MessageChildren(props) {
     return null;
   }
   return (
-    <div class="children">
+    <div className="children">
       {firstDisplayedChild > 0 && (
-        <div class="d-flex">
+        <div className="d-flex">
           <a
-            class="more-coms unselectable"
+            className="more-coms unselectable"
             onClick={() => displayPreviousChildren()}
           >
             {t("previous_coms")}
@@ -89,9 +88,9 @@ export default function MessageChildren(props) {
       })}
       {lastDisplayedChild + 1 <
         props.childMessages.length && (
-        <div class="d-flex">
+        <div className="d-flex">
           <span
-            class="more-coms unselectable"
+            className="more-coms unselectable"
             onClick={() => displayNextChildren()}
           >
             {t("next_coms")}

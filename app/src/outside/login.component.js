@@ -1,7 +1,6 @@
-import { h } from "preact";
+import React, { useEffect, useState } from "react";
 import { alert, storage, http, me, api } from "/src/core";
 import { useTranslation } from "react-i18next";
-import { useEffect, useState } from "preact/hooks";
 import { useNavigate } from "react-router-dom";
 
 export default function Login() {
@@ -71,37 +70,37 @@ export default function Login() {
   };
 
   return (
-    <div class="login">
-      <div class="login-form">
+    <div className="login">
+      <div className="login-form">
         <img src={new URL("/src/assets/zusam_logo.svg", import.meta.url)} />
         {!showResetPassword && (
           <form>
-            <div class="form-group mb-3">
+            <div className="form-group mb-3">
               <input
                 type="email"
-                class="form-control"
+                className="form-control"
                 required
                 id="login"
                 placeholder={t("login_placeholder")}
               />
             </div>
-            <div class="form-group">
+            <div className="form-group">
               <input
                 type="password"
-                class="form-control"
+                className="form-control"
                 required
                 id="password"
                 placeholder={t("password_placeholder")}
               />
             </div>
-            <div class="forgot-password">
+            <div className="forgot-password">
               <span onClick={() => setShowResetPassword(true)}>
                 {t("forgot_password")}
               </span>
             </div>
             <button
               type="submit"
-              class="btn btn-light"
+              className="btn btn-light"
               onClick={e => sendLoginForm(e)}
               disabled={sending}
             >
@@ -113,10 +112,10 @@ export default function Login() {
           <div>
             {allowEmails ? (
               <form>
-                <div class="form-group mb-3">
+                <div className="form-group mb-3">
                   <input
                     type="email"
-                    class="form-control"
+                    className="form-control"
                     required
                     id="login"
                     placeholder={t("login_placeholder")}
@@ -124,7 +123,7 @@ export default function Login() {
                 </div>
                 <button
                   type="submit"
-                  class="btn btn-light"
+                  className="btn btn-light"
                   onClick={e => sendPasswordReset(e)}
                   disabled={sending}
                 >
@@ -132,7 +131,7 @@ export default function Login() {
                 </button>
               </form>
             ) : (
-              <div class="welcome">{t("email_disabled")}</div>
+              <div className="welcome">{t("email_disabled")}</div>
             )}
           </div>
         )}

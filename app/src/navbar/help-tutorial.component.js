@@ -1,8 +1,7 @@
-import { h } from "preact";
+import React, { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { driver } from "driver.js";
 import "driver.js/dist/driver.css";
-import { useEffect, useState } from "preact/hooks";
 
 export default function HelpTutorial(props) {
   const { t } = useTranslation();

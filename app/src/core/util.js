@@ -144,7 +144,7 @@ const util = {
     ][Math.abs(util.hash(str)) % 27],
   backgroundHash: str => {
     if (!str) {
-      return "background-color: #aaa;";
+      return { backgroundColor: "#aaa" };
     }
     let c1 = util.colorHash(str);
     let c2 = util.colorHash(
@@ -154,9 +154,10 @@ const util = {
         .join(".")
     );
     let deg = 45 * (Math.abs(util.hash(str)) % 4);
-    return (
-      `background-color:${c1};background-image:linear-gradient(${deg}deg, ${c2} 15%, transparent 15% 30%, ${c2} 30% 45%, transparent 45% 60%, ${c2} 60% 75%, transparent 75% 90%, ${c2} 90%);`
-    );
+    return {
+      backgroundColor: c1,
+      backgroundImage: `linear-gradient(${deg}deg, ${c2} 15%, transparent 15% 30%, ${c2} 30% 45%, transparent 45% 60%, ${c2} 60% 75%, transparent 75% 90%, ${c2} 90%)`
+    };
   },
   // Accepts a keydown event and checks if it's enter. Compatibility between browsers
   // We do it the permissive way

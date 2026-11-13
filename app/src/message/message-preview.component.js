@@ -1,9 +1,9 @@
-import { h, Fragment } from "preact";
+import React, { Fragment, useEffect, useState } from "react";
+
 import { util, notifications, http } from "/src/core";
 import { FaIcon } from "/src/misc";
 import { Link } from "react-router-dom";
 import { HumanTime } from "/src/pages";
-import { useEffect, useState } from "preact/hooks";
 import { parseMessage } from "../quill/quill-common";
 
 export default function MessagePreview(props) {
@@ -69,38 +69,38 @@ export default function MessagePreview(props) {
   }
   if (!data) {
     return (
-      <div class="d-inline-block message-preview unselectable">
-        <div class="card message-preview-loading material-shadow-with-hover" />
+      <div className="d-inline-block message-preview unselectable">
+        <div className="card message-preview-loading material-shadow-with-hover" />
       </div>
     );
   }
   return (
     <Link
       to={`/messages/${id}`}
-      class="d-inline-block seamless-link message-preview unselectable"
+      className="d-inline-block seamless-link message-preview unselectable"
       title={data?.title}
     >
-      <div tabindex={props?.tabindex} class="card material-shadow-with-hover">
+      <div tabIndex={props?.tabIndex} className="card material-shadow-with-hover">
         {getAvatar(author)}
-        <div class="card-miniature-loading">
+        <div className="card-miniature-loading">
           {loaded && (
             <Fragment>
               {preview ? (
                 <div
-                  class="card-miniature"
+                  className="card-miniature"
                 >
                   <img width="320" height="180" src={util.crop(util.getId(preview), 320, 180)} onError={e => setDefaultMiniature(e)} />
                 </div>
               ) : (
-                <div class="text-preview">{textPreview}</div>
+                <div className="text-preview">{textPreview}</div>
               )}
             </Fragment>
           )}
         </div>
-        <div class="card-body border-top d-flex justify-content-between">
-          <span class="left-buffer" />
+        <div className="card-body border-top d-flex justify-content-between">
+          <span className="left-buffer" />
           <span
-            class="title"
+            className="title"
             title={
               data?.title || util.humanFullDate(lastActivityDate)
             }
@@ -108,14 +108,14 @@ export default function MessagePreview(props) {
             {data?.title || (<HumanTime timestamp={lastActivityDate} />)}
           </span>
           {isPinned && !props.isFeed && (
-            <div class="pinned-icon">
+            <div className="pinned-icon">
               <FaIcon
                 family={"regular"}
                 icon={"thumbtack"}
               />
             </div>
           )}
-          <span class="children">
+          <span className="children">
             {children > 0 && (
               <span>
                 {`${children} `}

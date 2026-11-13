@@ -1,8 +1,8 @@
 
-import { h, Fragment } from "preact";
+import React, { Fragment, useEffect, useState } from "react";
+
 import { http } from "/src/core";
 import { FaIcon } from "/src/misc";
-import { useEffect, useState } from "preact/hooks";
 import { useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { leaveGroup} from "../settings/group-helpers";
@@ -45,26 +45,26 @@ export default function GroupHeader(props) {
   }, [props.id]);
 
   return (
-    <div class="header-container container-fluid">
+    <div className="header-container container-fluid">
       <section
-        class="header-section"
+        className="header-section"
         aria-label={group?.name || t("group")}
       >
-        <div class="group-header-main">
-          <div class="group-header-avatar">
-            <span class="group-header-avatar-placeholder">
+        <div className="group-header-main">
+          <div className="group-header-avatar">
+            <span className="group-header-avatar-placeholder">
               <FaIcon family="solid" icon="users" />
             </span>
           </div>
 
-          <div class="group-header-info">
-            <h1 class="group-header-name">
+          <div className="group-header-info">
+            <h1 className="group-header-name">
               {props.invite ? t("invite_noname") :
                 loading ? "…" : group?.name}
             </h1>
 
             {group?.users?.length != null && (
-              <div class="group-header-members">
+              <div className="group-header-members">
                 <FaIcon family="solid" icon="users" />
                 <span>
                   {group.users.length} {t("members")}
@@ -73,32 +73,32 @@ export default function GroupHeader(props) {
             )}
           </div>
 
-          <div class="group-header-actions">
+          <div className="group-header-actions">
             {props.isMember ? (
               <>
                 <button
                   type="button"
-                  class="btn btn-outline-primary"
+                  className="btn btn-outline-primary"
                   onClick={()=>navigate("/invite?group=" + props.id)}
                 >
                   <FaIcon family="solid" icon="users" />
-                  <span class="d-none d-md-inline">{t("invite_to_group")}</span>
-                  <span class="d-inline d-md-none">{t("invite")}</span>
+                  <span className="d-none d-md-inline">{t("invite_to_group")}</span>
+                  <span className="d-inline d-md-none">{t("invite")}</span>
                 </button>
                 <button
                   type="button"
-                  class="btn btn-outline-danger"
+                  className="btn btn-outline-danger"
                   onClick={e => leaveGroup(e, group, navigate, t)}
                 >
                   <FaIcon family="regular" icon="right-from-bracket" />
-                  <span class="d-none d-md-inline">{t("quit_group")}</span>
-                  <span class="d-inline d-md-none">{t("leave")}</span>
+                  <span className="d-none d-md-inline">{t("quit_group")}</span>
+                  <span className="d-inline d-md-none">{t("leave")}</span>
                 </button>
               </>
             ) : (
               <button
                 type="button"
-                class="btn btn-primary group-join-button"
+                className="btn btn-primary group-join-button"
                 onClick={() => props.onJoin()}
               >
                 <FaIcon family="solid" icon="plus" />
@@ -108,7 +108,7 @@ export default function GroupHeader(props) {
             {props.isMember && (
               <button
                 type="button"
-                class="btn btn-outline-secondary cog"
+                className="btn btn-outline-secondary cog"
                 onClick={() => props.onSettings?.(group)}
               >
                 <FaIcon family="solid" icon="cog" fontSize="2rem" />
@@ -117,7 +117,7 @@ export default function GroupHeader(props) {
           </div>
         </div>
 
-        <nav class="group-header-divider">
+        <nav className="group-header-divider">
 
         </nav>
       </section>

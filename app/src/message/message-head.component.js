@@ -1,9 +1,9 @@
-import { h } from "preact";
+import React from "react";
 import { util } from "/src/core";
 
 export default function MessageHead(props) {
   return (
-    <div class="message-head d-flex">
+    <div className="message-head d-flex">
       {!props.isPublic && (
         <div>
           <img
@@ -24,8 +24,8 @@ export default function MessageHead(props) {
         </div>
       )}
       {!props.isChild && !props.isPublic && (
-        <div class="infos">
-          <span class="capitalize author">
+        <div className="infos">
+          <span className="capitalize author">
             {props.author && props.author.name ? props.author.name : ""}
           </span>
         </div>

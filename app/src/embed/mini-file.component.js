@@ -1,5 +1,4 @@
-import { h } from "preact";
-import { useState, useRef, useEffect } from "preact/hooks";
+import React, { useEffect, useState, useRef } from "react";
 import { util } from "/src/core";
 import { FaIcon } from "/src/misc";
 import { polyfill } from "mobile-drag-drop";
@@ -142,23 +141,23 @@ export default function MiniFile(props) {
   switch (props.file.status) {
   case "loading":
     return (
-      <a class="file-embed file-loading rounded" id={props.file.id}>
-        <div class="miniature" />
+      <a className="file-embed file-loading rounded" id={props.file.id}>
+        <div className="miniature" />
       </a>
     );
   case "uploading":
   case "initial":
     return (
-      <a class="file-embed file-loading rounded" id={props.file.id}>
+      <a className="file-embed file-loading rounded" id={props.file.id}>
         <div
-          class="miniature video-raw"
-          style={`background-image:url("${util.crop(props.file.id, 160, 160)}")`}
+          className="miniature video-raw"
+          style={{ backgroundImage: `url("${util.crop(props.file.id, 160, 160)}")` }}
         />
-        <div class="spinner orange-spinner">
+        <div className="spinner orange-spinner">
           <div /><div /><div /><div /><div />
         </div>
         { props.file && props.file.progress > 0 && (
-          <div class="progress-bar">
+          <div className="progress-bar">
             <div style={{ width: `${props.file.progress}%` }} />
           </div>
         )}
@@ -187,8 +186,8 @@ export default function MiniFile(props) {
             }
           />
           <div
-            class="remove-button"
-            style={props.file.removed ? "color:red" : ""}
+            className="remove-button"
+            style={props.file.removed ? { color: "red" } : undefined}
             onClick={e => props.toggleFile(e)}
           >
             <FaIcon family={"solid"} icon={"times"} />
@@ -203,7 +202,7 @@ export default function MiniFile(props) {
           draggable={!!props.inWriter}
           data-origin={util.toApp(filePath)}
           href={!props.inWriter ? util.toApp(filePath) : undefined}
-          class={`${!props.inWriter ? "glightbox ": ""}file-embed rounded`}
+          className={`${!props.inWriter ? "glightbox ": ""}file-embed rounded`}
           id={props.file.id}
           data-type="image"
           onClick={e => openLightbox(e)}
@@ -215,8 +214,8 @@ export default function MiniFile(props) {
             }
           />
           <div
-            class="remove-button"
-            style={props.file.removed ? "color:red" : ""}
+            className="remove-button"
+            style={props.file.removed ? { color: "red" } : undefined}
             onClick={e => props.toggleFile(e)}
           >
             <FaIcon family={"solid"} icon={"times"} />
@@ -234,7 +233,7 @@ export default function MiniFile(props) {
           data-srcset={`${util.thumbnail(props.file.id, 720)} 720w, ${util.thumbnail(props.file.id, 1366)} 1366w, ${util.thumbnail(props.file.id, 2048)} 2048w`}
           data-sizes="(max-width: 992px) 720px, (max-width: 1400px) 1366px, 2048px"
           href={!props.inWriter ? util.toApp(filePath) : undefined}
-          class={`${!props.inWriter ? "glightbox ": ""}file-embed rounded`}
+          className={`${!props.inWriter ? "glightbox ": ""}file-embed rounded`}
           id={props.file.id}
           onClick={e => openLightbox(e)}
         >
@@ -245,8 +244,8 @@ export default function MiniFile(props) {
             }
           />
           <div
-            class="remove-button"
-            style={props.file.removed ? "color:red" : ""}
+            className="remove-button"
+            style={props.file.removed ? { color: "red" } : undefined}
             onClick={e => props.toggleFile(e)}
           >
             <FaIcon family={"solid"} icon={"times"} />

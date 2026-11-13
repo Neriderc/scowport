@@ -1,9 +1,8 @@
-import { h, Fragment } from "preact";
+import React, { Fragment, useEffect, useState } from "react";
 import { http, util, notifications } from "/src/core";
-import { useEffect, useState } from "preact/hooks";
-import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { FaIcon } from "/src/misc";
+import { useNavigate } from "react-router-dom";
 
 export default function Notification(props) {
 
@@ -13,7 +12,8 @@ export default function Notification(props) {
   const [title, setTitle] = useState(null);
   const [author, setAuthor] = useState(null);
   const [notification, setNotification] = useState(null);
-
+  const navigate = useNavigate();
+  
   const getMiniature = (notification) => {
     let imgSrc = util.defaultAvatar;
     if (
@@ -142,15 +142,22 @@ export default function Notification(props) {
     return null;
   }
   return (
-    <Link
-      key={props.id}
-      class={`notification seamless-link unselectable ${!notification.read ? "unread" : ""}`}
-      to={target}
+    <div
+      className={`notification seamless-link unselectable ${!notification.read ? "unread" : ""}`}
       title={title}
+      onClick={() => navigate(target)}
+      role="link"
+      tabIndex={0}
+      onKeyDown={e => {
+        if (e.key === "Enter") navigate(target);
+      }}
     >
-      <div class="miniature unselectable">{getMiniature(notification)}</div>
-      <div class="infos">
-        <div class="description">
+      <div className="miniature unselectable">
+        {getMiniature(notification)}
+      </div>
+
+      <div className="infos">
+        <div className="description">
           {notification.type != "global_notification" && (
             <Fragment>
               <strong>{author?.name || "--"}</strong>
@@ -159,30 +166,37 @@ export default function Notification(props) {
           )}
           {getObject(notification)}
         </div>
-        <div class="date">
+
+        <div className="date">
           {util.humanTime(notification.createdAt)}
         </div>
       </div>
+
       <div
-        class="options dropdown"
+        className="options dropdown"
         onClick={e => {
           e.stopPropagation();
           e.preventDefault();
-          e?.target?.closest(".dropdown")?.classList.toggle("active");
+          e.currentTarget.classList.toggle("active");
         }}
       >
-        <div class="none-if-follows-empty">
+        <div className="none-if-follows-empty">
           <FaIcon family="solid" icon="ellipsis-h" />
         </div>
-        <div class="dropdown-menu dropdown-options">
-          <a
-            class="seamless-link capitalize"
-            onClick={() => notifications.removeMatchingNotifications(notification.id)}
+
+        <div className="dropdown-menu dropdown-options">
+          <button
+            type="button"
+            className="seamless-link capitalize"
+            onClick={e => {
+              e.stopPropagation();
+              notifications.removeMatchingNotifications(notification.id);
+            }}
           >
             {t("delete")}
-          </a>
+          </button>
         </div>
       </div>
-    </Link>
+    </div>
   );
 }

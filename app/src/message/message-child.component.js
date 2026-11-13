@@ -1,4 +1,4 @@
-import { h } from "preact";
+import React from "react";
 import Message from "./message.component.js";
 
 export default function MessageChild(props) {

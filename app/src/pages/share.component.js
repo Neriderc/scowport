@@ -1,12 +1,11 @@
-import { h } from "preact";
+import React, { useEffect, useState } from "react";
+import { useStore } from "@nanostores/react";
 import { me as meService, http } from "/src/core";
 import { Writer } from "/src/writer";
 import { Navbar } from "/src/navbar";
-import { useStore } from "@nanostores/preact";
 import { $me } from "/src/store/me.js";
 import { useLocation } from "react-router-dom";
 import { useTranslation } from "react-i18next";
-import { useEffect, useState } from "preact/hooks";
 
 export default function Share() {
 
@@ -67,17 +66,17 @@ export default function Share() {
   return (
     <main>
       <Navbar />
-      <div class="content">
-        <article class="mt-2">
-          <div class="container">
+      <div className="content">
+        <article className="mt-2">
+          <div className="container">
             {!parent && me?.groups?.length > 1 && (
-              <div class="mb-1">
-                <label class="px-1" for="group_share_choice">
+              <div className="mb-1">
+                <label className="px-1" for="group_share_choice">
                   {t("group_share_choice")}
                 </label>
                 <select
                   value={group}
-                  class="form-select"
+                  className="form-select"
                   name="group_share_choice"
                   onChange={e => setGroup(e.target.value)}
                   required
@@ -89,7 +88,7 @@ export default function Share() {
               </div>
             )}
             {!!parent && (
-              <div class="form-group">
+              <div className="form-group">
                 <label for="apiKey">
                   {t("parent_message")}:{" "}
                 </label>
@@ -97,8 +96,8 @@ export default function Share() {
                   type="text"
                   name="parent_message"
                   value={parent}
-                  class="form-control font-size-80"
-                  readonly="readonly"
+                  className="form-control font-size-80"
+                  readOnly
                 />
               </div>
             )}

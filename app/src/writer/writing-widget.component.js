@@ -1,10 +1,9 @@
-import { h } from "preact";
+import React, { useState, useRef } from "react";
 import { http, util, api } from "/src/core";
 import { FaIcon } from "/src/misc";
 import { EmbedBlock, FileGrid } from "/src/embed";
 import QuillEditor from "../quill/quill-editor.component";
 import { useTranslation } from "react-i18next";
-import { useState, useRef, useEffect } from "preact/hooks";
 
 export default function WritingWidget(props) {
   const [preview, setPreview] = useState(null);
@@ -24,7 +23,7 @@ export default function WritingWidget(props) {
   const cleanForm = () => {
     previewGenRef.current++;
     setPreview(null);
-    setLink(null);
+    setLink("");
     setText("");
     setTitle("");
   };
@@ -87,22 +86,21 @@ export default function WritingWidget(props) {
 
   if (props.sending) {
     return (
-      <div class="message-placeholder">
-        <div class="spinner orange-spinner">
+      <div className="message-placeholder">
+        <div className="spinner orange-spinner">
           <div /><div /><div /><div /><div />
         </div>
       </div>
     );
   }
   return (
-    <div id={props.id} class="writer" ref={writerForm}>
+    <div id={props.id} className="writer" ref={writerForm}>
       {!props.isChild && (
         <input
           type="text"
-          class="title-input"
-          onKeyPress={e => onKeyDown(e)}
+          className="title-input"
           placeholder={t("title_placeholder")}
-          value={title}
+          defaultValue={title}
           onChange={e => setTitle(e.target.value)}
         />
       )}
@@ -112,10 +110,10 @@ export default function WritingWidget(props) {
         onKeyDown={onKeyDown}
       >
         {!props.edit && props.depth == 0 && (
-          <span>Commenting on <span class="reply-name">{props?.message?.data?.title}</span></span>
+          <span>Commenting on <span className="reply-name">{props?.message?.data?.title}</span></span>
         )}
         {!props.edit && props.depth > 0 && (
-          <span>Replying to <span class="reply-name">{props?.author?.name}</span></span>
+          <span>Replying to <span className="reply-name">{props?.author?.name}</span></span>
         )}
         <QuillEditor
           editorRef={quill => { props.editorRef.current = quill; }}
@@ -137,10 +135,10 @@ export default function WritingWidget(props) {
           inWriter={true}
         />
       )}
-      <div class="options">
+      <div className="options">
         {api?.info?.upload?.image && (
           <button
-            class="option"
+            className="option"
             onClick={() => props.inputFile("image/*,video/*", true)}
             title={t("upload_media")}
           >
@@ -149,23 +147,23 @@ export default function WritingWidget(props) {
         )}
         {api?.info?.upload?.pdf && (
           <button
-            class="option"
+            className="option"
             onClick={() => props.inputFile("application/pdf")}
             title={t("upload_pdf")}
           >
             <FaIcon family={"regular"} icon={"file-pdf"} />
           </button>
         )}
-        <div class="actions">
+        <div className="actions">
           {!!props.cancel && (props.depth > 0 || props.edit) && (
-            <button class="cancel" onClick={e => props.cancel(e)}>
+            <button className="cancel" onClick={e => props.cancel(e)}>
               {t("cancel")}
             </button>
           )}
           <button
             disabled={!props.group || props.uploading}
             type="submit"
-            class="submit"
+            className="submit"
             onClick={() => sendMessage(writerForm)}
           >
             {t("submit")}

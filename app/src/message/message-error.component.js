@@ -1,4 +1,4 @@
-import { h } from "preact";
+import React from "react";
 import { useTranslation } from "react-i18next";
 
 export default function MessageError(props) {
@@ -17,9 +17,9 @@ export default function MessageError(props) {
   };
 
   return (
-    <div class="message">
-      <div class="message-body">
-        <p class="card-text">{getError(props.error)}</p>
+    <div className="message">
+      <div className="message-body">
+        <p className="card-text">{getError(props.error)}</p>
       </div>
     </div>
   );

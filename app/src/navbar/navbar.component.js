@@ -1,13 +1,12 @@
-import { h } from "preact";
+import React, { useState } from "react";
+import { useStore } from "@nanostores/react";
 import { router, util } from "/src/core";
 import { Search } from "/src/pages";
 import { GroupsDropdownNavbar, NotificationsDropdownNavbar, HelpTutorial } from "/src/navbar";
 import { Link } from "react-router-dom";
-import { useStore } from "@nanostores/preact";
 import { $me } from "/src/store/me.js";
 import { useTranslation } from "react-i18next";
 import { FaIcon } from "/src/misc";
-import { useState } from "preact/hooks";
 const TOUR_KEY = "app-tour-step";
 
 export default function Navbar() {
@@ -16,17 +15,17 @@ export default function Navbar() {
   const me = useStore($me);
   const [tutorialActive, setTutorialActive] = useState(!!localStorage.getItem(TOUR_KEY));
   return (
-    <div class="main-nav nav align-items-center z-index-100">
-      <div class="navbar-block">
+    <div className="main-nav nav align-items-center z-index-100">
+      <div className="navbar-block">
         <div
           id="profile-menu"
-          class="menu dropdown cursor-pointer"
-          tabindex="-1"
+          className="menu dropdown cursor-pointer"
+          tabIndex="-1"
           onClick={e => e.currentTarget.classList.toggle("active")}
         >
-          <div class="rounded-circle avatar unselectable">
+          <div className="rounded-circle avatar unselectable">
             <img
-              class="rounded-circle"
+              className="rounded-circle"
               style={util.backgroundHash(me.id)}
               src={
                 me.avatar
@@ -36,21 +35,21 @@ export default function Navbar() {
               onError={e => (e.currentTarget.src = util.defaultAvatar)}
             />
           </div>
-          <div class="dropdown-menu dropdown-right">
+          <div className="dropdown-menu dropdown-right">
             <Link
-              class="d-block seamless-link capitalize"
+              className="d-block seamless-link capitalize"
               to={"/bookmarks"}
             >
               {t("bookmarks")}
             </Link>
             <Link
-              class="d-block seamless-link capitalize"
+              className="d-block seamless-link capitalize"
               to={`/users/${me.id}/settings`}
             >
               {t("settings")}
             </Link>
             <Link
-              class="d-block seamless-link capitalize"
+              className="d-block seamless-link capitalize"
               to={"/logout"}
             >
               {t("logout")}
@@ -62,7 +61,7 @@ export default function Navbar() {
         <Link
           to={"/feed"}
           id="feed"
-          class={`seamless-link nav-link nav-button unselectable ${router.route === "feed" ? "nav-active" : ""}`}
+          className={`seamless-link nav-link nav-button unselectable ${router.route === "feed" ? "nav-active" : ""}`}
           title={t("feed_group")}
           aria-label={t("feed_group")}
         >
@@ -73,7 +72,7 @@ export default function Navbar() {
         </Link>
         <button
           id="help"
-          class={`seamless-link nav-link nav-button unselectable ${router.route === "help" ? "nav-active" : ""}`}
+          className={`seamless-link nav-link nav-button unselectable ${router.route === "help" ? "nav-active" : ""}`}
           title={t("help")}
           aria-label={t("help")}
           onClick={() => { setTutorialActive(true); localStorage.removeItem(TOUR_KEY); }}
@@ -88,7 +87,7 @@ export default function Navbar() {
         ["messages", "groups"].includes(router.route) && (
           <Search/>
         )}
-      <div class="navbar-block">
+      <div className="navbar-block">
         <GroupsDropdownNavbar groups={me.groups} />
       </div>
       {tutorialActive && (

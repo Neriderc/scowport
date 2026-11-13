@@ -1,4 +1,4 @@
-import { h } from "preact";
+import React from "react";
 import { alert, storage, http, router, me } from "/src/core";
 import { useTranslation } from "react-i18next";
 import { useNavigate, useSearchParams } from "react-router-dom";
@@ -82,40 +82,40 @@ export default function Signup() {
   };
 
   return (
-    <div class="signup">
-      <div class="signup-form">
+    <div className="signup">
+      <div className="signup-form">
         <img src={new URL("/src/assets/zusam_logo.svg", import.meta.url)} />
-        <div class="welcome lead">{t("invitation_welcome")}</div>
+        <div className="welcome lead">{t("invitation_welcome")}</div>
         <form>
-          <div class="form-group mt-2">
+          <div className="form-group mt-2">
             <input
               type="email"
-              class="form-control"
+              className="form-control"
               required
               id="name"
               placeholder={t("name")}
             />
             <input
               type="email"
-              class="form-control mt-2"
+              className="form-control mt-2"
               required
               id="login"
               placeholder={t("login_placeholder")}
             />
           </div>
-          <div class="form-group mt-2">
+          <div className="form-group mt-2">
             <input
               type="email"
-              class="form-control"
+              className="form-control"
               required
               id="login-confirm"
               placeholder={t("login_confirm")}
             />
           </div>
-          <div class="form-group">
+          <div className="form-group">
             <input
               type="password"
-              class="form-control mt-2"
+              className="form-control mt-2"
               required
               id="password"
               placeholder={t("password_placeholder")}
@@ -123,7 +123,7 @@ export default function Signup() {
           </div>
           <button
             type="submit"
-            class="btn btn-light mt-3"
+            className="btn btn-light mt-3"
             onClick={e => sendSignupForm(e)}
           >
             {t("signup")}

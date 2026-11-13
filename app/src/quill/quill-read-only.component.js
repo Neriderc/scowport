@@ -1,5 +1,4 @@
-import { h } from "preact";
-import { useEffect, useRef } from "preact/hooks";
+import React, { useEffect, useRef } from "react";
 import Quill from "quill";
 import "quill/dist/quill.snow.css";
 

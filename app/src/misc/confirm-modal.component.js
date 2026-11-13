@@ -1,5 +1,6 @@
-import { h, Fragment } from "preact";
-import { useStore } from "@nanostores/preact";
+import React from "react";
+import { useStore } from "@nanostores/react";
+
 import { $confirm, closeConfirm } from "../store/confirm-modal.js";
 
 export default function ConfirmModal() {
@@ -10,31 +11,31 @@ export default function ConfirmModal() {
   return (
     <>
       <div
-        class="modal-backdrop fade show"
+        className="modal-backdrop fade show"
         onClick={() => closeConfirm(false)}
       ></div>
 
-      <div class="modal fade show d-block" tabindex="-1">
-        <div class="modal-dialog modal-dialog-centered">
-          <div class="modal-content">
-            <div class="modal-header">
-              <h5 class="modal-title">{state.title}</h5>
+      <div className="modal fade show d-block" tabIndex="-1">
+        <div className="modal-dialog modal-dialog-centered">
+          <div className="modal-content">
+            <div className="modal-header">
+              <h5 className="modal-title">{state.title}</h5>
             </div>
 
-            <div class="modal-body">
+            <div className="modal-body">
               <p>{state.message}</p>
             </div>
 
-            <div class="modal-footer">
+            <div className="modal-footer">
               <button
-                class="btn btn-secondary"
+                className="btn btn-secondary"
                 onClick={() => closeConfirm(false)}
               >
                 {state.cancelText}
               </button>
 
               <button
-                class={`btn btn-${state.variant}`}
+                className={`btn btn-${state.variant}`}
                 onClick={() => closeConfirm(true)}
               >
                 {state.confirmText}

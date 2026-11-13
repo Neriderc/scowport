@@ -1,4 +1,4 @@
-import { h, Fragment } from "preact";
+import React, { Fragment } from "react";
 import { util } from "/src/core";
 import { useTranslation } from "react-i18next";
 

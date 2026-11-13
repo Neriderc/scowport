@@ -1,6 +1,5 @@
-import { h } from "preact";
+import React, { useEffect, useState } from "react";
 import { alert, http, util, router, api } from "/src/core";
-import { useEffect, useState } from "preact/hooks";
 import { useTranslation } from "react-i18next";
 import { useNavigate, useParams } from "react-router-dom";
 import { leaveGroup} from "./group-helpers";
@@ -52,29 +51,29 @@ export default function GroupSettings() {
 
   return (
     <div>
-      <div class="group-settings mb-3">
-        <div class="card">
-          <div class="card-body">
-            <div class="container-fluid p-1">
-              <div class="row">
-                <div class="col-12 col-md-10">
-                  <form id="settings_form" class="mb-1 border-bottom pb-1">
-                    <div class="form-group">
-                      <label for="name">{t("name")}: </label>
+      <div className="group-settings mb-3">
+        <div className="card">
+          <div className="card-body">
+            <div className="container-fluid p-1">
+              <div className="row">
+                <div className="col-12 col-md-10">
+                  <form id="settings_form" className="mb-1 border-bottom pb-1">
+                    <div className="form-group">
+                      <label htmlFor="name">{t("name")}: </label>
                       <input
                         type="text"
                         name="name"
-                        minlength="1"
-                        maxlength="128"
+                        minLength="1"
+                        maxLength="128"
                         placeholder={t("name_input")}
-                        value={group.name}
-                        class="form-control"
+                        defaultValue={group.name}
+                        className="form-control"
                         required
                       />
                     </div>
                     <button
                       onClick={updateSettings}
-                      class="btn btn-outline-secondary mt-2"
+                      className="btn btn-outline-secondary mt-2"
                     >
                       {t("save_changes")}
                     </button>
@@ -84,22 +83,22 @@ export default function GroupSettings() {
                     {api?.info?.show?.group_invitation_links && (
                       <button
                         type="button"
-                        class="btn btn-outline-primary"
+                        className="btn btn-outline-primary"
                         onClick={()=>navigate("/invite?group=" + params.id)}
                       >
                         <FaIcon family="solid" icon="users" />
-                        <span class="d-none d-md-inline ms-2">{t("invite_to_group")}</span>
-                        <span class="d-inline d-md-none ms-2">{t("invite")}</span>
+                        <span className="d-none d-md-inline ms-2">{t("invite_to_group")}</span>
+                        <span className="d-inline d-md-none ms-2">{t("invite")}</span>
                       </button>
                     )}
                     <button
                       type="button"
-                      class="btn btn-outline-danger ms-2"
+                      className="btn btn-outline-danger ms-2"
                       onClick={e => leaveGroup(e, group, navigate, t)}
                     >
                       <FaIcon family="regular" icon="right-from-bracket" />
-                      <span class="d-none d-md-inline ms-2">{t("quit_group")}</span>
-                      <span class="d-inline d-md-none ms-2">{t("leave")}</span>
+                      <span className="d-none d-md-inline ms-2">{t("quit_group")}</span>
+                      <span className="d-inline d-md-none ms-2">{t("leave")}</span>
                     </button>
                   </form>
                 </div>
@@ -108,14 +107,14 @@ export default function GroupSettings() {
           </div>
         </div>
       </div>
-      <div class="user-list mb-3">
+      <div className="user-list mb-3">
         <h3>{t("users")}</h3>
         {users.map(
           user =>
             user && (
-              <div class="user-card" key={user.id}>
+              <div className="user-card" key={user.id}>
                 <img
-                  class="avatar material-shadow-with-hover"
+                  className="avatar material-shadow-with-hover"
                   style={util.backgroundHash(user.id)}
                   src={
                     user.avatar
@@ -130,7 +129,7 @@ export default function GroupSettings() {
         )}
       </div>
       {alertMessage && (
-        <div class="global-alert alert alert-success">{alertMessage}</div>
+        <div className="global-alert alert alert-success">{alertMessage}</div>
       )}
     </div>
   );

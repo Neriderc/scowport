@@ -1,4 +1,4 @@
-import { h } from "preact";
+import React from "react";
 import { alert, storage, http, router } from "/src/core";
 import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
@@ -35,23 +35,23 @@ export default function PasswordReset() {
   };
 
   return (
-    <div class="login">
-      <div class="login-form">
-        <h2 class="title">{t("reset_password_title")}</h2>
+    <div className="login">
+      <div className="login-form">
+        <h2 className="title">{t("reset_password_title")}</h2>
         <form>
-          <div class="form-group">
+          <div className="form-group">
             <input
               type="password"
-              class="form-control"
+              className="form-control"
               required
               id="password"
               placeholder={t("new_password_placeholder")}
             />
           </div>
-          <div class="form-group">
+          <div className="form-group">
             <input
               type="password"
-              class="form-control"
+              className="form-control"
               required
               id="password_confirmation"
               placeholder={t("confirm_password_placeholder")}
@@ -59,7 +59,7 @@ export default function PasswordReset() {
           </div>
           <button
             type="submit"
-            class="btn btn-light"
+            className="btn btn-light"
             onClick={e => sendNewPassword(e)}
           >
             {t("submit")}

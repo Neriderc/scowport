@@ -1,6 +1,5 @@
-import { h } from "preact";
+import React, { useEffect, useState } from "react";
 import { util, router } from "/src/core";
-import { useState, useEffect } from "preact/hooks";
 import BandCampEmbed from "./bandcamp-embed.component.js";
 import GenericEmbed from "./generic-embed.component.js";
 import GLightbox from "glightbox";
@@ -57,7 +56,7 @@ export default function EmbedBlock(props) {
         // default embed code
         if (props.data["code"]) {
           return (
-            <div class="embed-container" dangerouslySetInnerHTML={{ __html: props.data["code"] }} />
+            <div className={"embed-container"} dangerouslySetInnerHTML={{ __html: props.data["code"] }} />
           );
         }
       }
@@ -179,10 +178,10 @@ export default function EmbedBlock(props) {
     }
     if (props.data["content-type"] == "image/gif") {
       return (
-        <div class="container d-flex justify-content-center flex-wrap align-items-center">
+        <div className={"container d-flex justify-content-center flex-wrap align-items-center"}>
           <img
             href={util.toApp(props.url)}
-            class="img-fluid"
+            className={"img-fluid"}
             data-origin={props.url}
             data-src={props.url}
             src={props.url}
@@ -192,10 +191,10 @@ export default function EmbedBlock(props) {
     }
     if (/image/.test(props.data["content-type"])) {
       return (
-        <div class="container d-flex justify-content-center flex-wrap align-items-center">
+        <div className={"container d-flex justify-content-center flex-wrap align-items-center"}>
           <a
             href={util.toApp(props.url)}
-            class="glightbox"
+            className={"glightbox"}
             data-type="image"
             data-srcset={`${util.thumbnail(props.preview.id, 720)} 720w, ${util.thumbnail(props.preview.id, 1366)} 1366w, ${util.thumbnail(props.preview.id, 2048)} 2048w`}
             data-sizes="(max-width: 992px) 720px, (max-width: 1400px) 1366px, 2048px"
@@ -203,7 +202,7 @@ export default function EmbedBlock(props) {
           >
             <img
               href={util.toApp(props.url)}
-              class="img-fluid cursor-pointer"
+              className={"img-fluid cursor-pointer"}
               data-origin={props.url}
               data-src={util.thumbnail(props.preview.id, 1366)}
               src={util.thumbnail(props.preview.id, 2048)}
@@ -215,15 +214,15 @@ export default function EmbedBlock(props) {
     // application/ogg: https://developer.mozilla.org/en-US/docs/Web/HTTP/Configuring_servers_for_Ogg_media
     if (/video/.test(props.data["content-type"]) || props.data["content-type"] == "application/ogg") {
       return (
-        <div class="container d-flex justify-content-center flex-wrap align-items-center">
-          <video class="img-fluid" controls src={props.url} />
+        <div className={"container d-flex justify-content-center flex-wrap align-items-center"}>
+          <video className={"img-fluid"} controls src={props.url} />
         </div>
       );
     }
     if (/audio/.test(props.data["content-type"])) {
       return (
-        <div class="container d-flex justify-content-center flex-wrap align-items-center">
-          <audio class="w-100" controls>
+        <div className={"container d-flex justify-content-center flex-wrap align-items-center"}>
+          <audio className={"w-100"} controls>
             <source src={props.url} />
           </audio>
         </div>
@@ -235,19 +234,19 @@ export default function EmbedBlock(props) {
     ) {
       return (
         <a
-          class="preview-card seamless-link d-inline-block"
+          className={"preview-card seamless-link d-inline-block"}
           target="_blank"
           rel="noreferrer"
           href={util.toApp(props.url)}
         >
-          <div class="card" style="max-width: 480px">
+          <div className={"card"} style={{ maxWidth: "480px" }}>
             {props.preview && (
               <img
-                class="card-img-top"
+                className={"card-img-top"}
                 src={util.crop(props.preview.id, 320, 180)}
               />
             )}
-            <div class="card-body p-1">
+            <div className={"card-body p-1"}>
               <h5>{props.data["title"]}</h5>
               {props.data["description"] && (
                 <p>
@@ -267,7 +266,7 @@ export default function EmbedBlock(props) {
   }
   let preview = getPreview();
   if (preview) {
-    return <p class="text-center card-text">{preview}</p>;
+    return <p className={"text-center card-text"}>{preview}</p>;
   }
   return null;
 }

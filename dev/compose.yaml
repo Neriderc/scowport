@@ -24,7 +24,7 @@ services:
       - SHLINK_API_URL=http://shlink:8080/i
       - SHLINK_API_KEY=${SHLINK_API_KEY}
       - INVITE_APP_ORIGIN=http://localhost:8102
-    image: scowport
+    image: scowport-dev
 
   shlink:
     container_name: shlink

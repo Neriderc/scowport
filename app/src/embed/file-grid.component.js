@@ -1,4 +1,4 @@
-import { h } from "preact";
+import React from "react";
 import { BigFile, MiniFile } from "/src/embed";
 
 export default function FileGrid(props) {
@@ -16,7 +16,7 @@ export default function FileGrid(props) {
   }
   if (props.files && props.files.length > 1) {
     return (
-      <div class="file-grid">
+      <div className={"file-grid"}>
         {props.files
           .map(e => (
             <MiniFile
@@ -31,7 +31,7 @@ export default function FileGrid(props) {
     );
   }
   return (
-    <div class="file-grid d-flex justify-content-center flex-wrap">
+    <div className={"file-grid d-flex justify-content-center flex-wrap"}>
       {props.files
         .map(e => (
           <BigFile

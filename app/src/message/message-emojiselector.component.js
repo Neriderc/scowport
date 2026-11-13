@@ -1,8 +1,6 @@
-import { h } from "preact";
-import { useState, useEffect, useRef } from "preact/hooks";
+import React, { useEffect, useState, useRef, lazy, Suspense } from "react";
 import { http } from "/src/core";
 import { useTranslation } from "react-i18next";
-import { lazy, Suspense } from "preact/compat";
 const EmojiPicker = lazy(() => import("emoji-picker-react"));
 
 export default function MessageEmojiSelector(props) {

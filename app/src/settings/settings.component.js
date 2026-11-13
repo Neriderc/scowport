@@ -1,9 +1,9 @@
-import { h } from "preact";
+import React from "react";
+import { useStore } from "@nanostores/react";
 import UserSettings from "./user-settings.component.js";
 import GroupSettings from "./group-settings.component.js";
 import { Navbar } from "/src/navbar";
 import { Link, useParams } from "react-router-dom";
-import { useStore } from "@nanostores/preact";
 import { $me } from "/src/store/me.js";
 import { useTranslation } from "react-i18next";
 
@@ -16,14 +16,14 @@ export default function Settings() {
   return (
     <main>
       <Navbar />
-      <div class="content">
-        <article class="mt-2 justify-content-center d-flex">
-          <div class="container pb-3">
-            <div class="settings">
-              <ul class="nav nav-tabs">
-                <li class="nav-item">
+      <div className="content">
+        <article className="mt-2 justify-content-center d-flex">
+          <div className="container pb-3">
+            <div className="settings">
+              <ul className="nav nav-tabs">
+                <li className="nav-item">
                   <Link
-                    class={`nav-link${params.type == "users" ? " active" : ""}`}
+                    className={`nav-link${params.type == "users" ? " active" : ""}`}
                     to={`/users/${me.id}/settings`}
                   >
                     {t("account")}
@@ -31,20 +31,20 @@ export default function Settings() {
                 </li>
                 {me.groups?.length > 0 && (
                   <li
-                    class="nav-item dropdown group-list"
-                    tabindex="-1"
+                    className="nav-item dropdown group-list"
+                    tabIndex="-1"
                     onClick={e => e.currentTarget.classList.toggle("active")}
                   >
                     <div
-                      class={`nav-link${params.type == "groups" ? " active" : ""}`}
+                      className={`nav-link${params.type == "groups" ? " active" : ""}`}
                     >
                       {t("groups")}
                     </div>
-                    <div class="dropdown-menu">
+                    <div className="dropdown-menu">
                       {me.groups?.map(e => (
                         <Link
                           key={`/groups/${e.id}/settings`}
-                          class="seamless-link"
+                          className="seamless-link"
                           to={`/groups/${e.id}/settings`}
                         >
                           {e.name}

@@ -1,4 +1,5 @@
-import { h, Fragment } from "preact";
+import React, { Fragment, useEffect, useState, useReducer, useRef } from "react";
+import { useStore } from "@nanostores/react";
 import { http, router, util, notifications } from "/src/core";
 import MessageChildren from "./message-children.component.js";
 import MessageHead from "./message-head.component.js";
@@ -6,10 +7,8 @@ import MessageFooter from "./message-footer.component.js";
 import MessageBody from "./message-body.component.js";
 import MessageBreadcrumbs from "./message-breadcrumbs.component.js";
 import { Writer } from "/src/writer";
-import { useEffect, useState, useRef, useReducer } from "preact/hooks";
 import { useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
-import { useStore } from "@nanostores/preact";
 import { $me } from "/src/store/me.js";
 import MessageError from "./message-error.component.js";
 import { showConfirm } from "/src/store/confirm-modal.js";
@@ -307,16 +306,16 @@ export default function Message(props) {
   return (
     <Fragment>
       {!props?.isChild && !props?.isPublic && (
-        <MessageBreadcrumbs key={message?.id} message={message} />
+        <MessageBreadcrumbs key={"message?.id"} message={message} />
       )}
       <div id={props.id} className={getComponentClass()}>
         {edit && displayWriter(props?.isChild)}
         {!edit && (
           <Fragment>
             {props.isChild && !props.isPublic && edit && (
-              <div class="message-head d-none d-md-block">
+              <div className="message-head d-none d-md-block">
                 <img
-                  class="rounded-circle w-3 material-shadow avatar"
+                  className="rounded-circle w-3 material-shadow avatar"
                   style={util.backgroundHash(me.id)}
                   src={
                     me.avatar
@@ -332,7 +331,7 @@ export default function Message(props) {
               isPublic={props?.isPublic}
               isChild={props?.isChild}
             />
-            <div class="main">
+            <div className="main">
               <MessageBody
                 author={author}
                 message={message}
@@ -370,11 +369,11 @@ export default function Message(props) {
         />
       )}
       {!edit && !props?.isPublic && (!props?.isChild || showReplyWriter) && (
-        <div class={`message child ${props.depth > 0 ? "reply" : ""} ${showReplyWriter ? "depth-2" : ""}`}>
+        <div className={`message child ${props.depth > 0 ? "reply" : ""} ${showReplyWriter ? "depth-2" : ""}`}>
           {me?.id && (
-            <div class={"message-head d-none d-md-block "}>
+            <div className={"message-head d-none d-md-block "}>
               <img
-                class="rounded-circle w-3 material-shadow avatar"
+                className="rounded-circle w-3 material-shadow avatar"
                 style={util.backgroundHash(me.id)}
                 src={
                   me?.avatar

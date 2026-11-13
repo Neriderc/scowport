@@ -1,5 +1,4 @@
-import { h } from "preact";
-import { useState, useEffect } from "preact/hooks";
+import React, { useEffect, useState } from "react";
 import { http } from "/src/core";
 import MessageEmojiSelector from "./message-emojiselector.component";
 import { useTranslation } from "react-i18next";

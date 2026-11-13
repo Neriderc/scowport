@@ -1,7 +1,6 @@
-import { h } from "preact";
+import React, { useEffect, useState } from "react";
 import { router, http } from "/src/core";
 import { MessageSearchResult } from "/src/message";
-import { useEffect, useState } from "preact/hooks";
 import { useTranslation } from "react-i18next";
 
 export default function GroupSearch(props) {
@@ -47,11 +46,11 @@ export default function GroupSearch(props) {
 
   return (
     <div>
-      <article id="group" class="justify-content-center d-flex">
-        <div class="search-results-container container-fluid d-flex justify-content-center flex-wrap">
+      <article id="group" className="justify-content-center d-flex">
+        <div className="search-results-container container-fluid d-flex justify-content-center flex-wrap">
           {messages.length == 0 && !loaded && (
             <p>
-              <div class="mt-5 spinner orange-spinner">
+              <div className="mt-5 spinner orange-spinner">
                 <div /><div /><div /><div /><div />
               </div>
             </p>
@@ -62,7 +61,7 @@ export default function GroupSearch(props) {
           {messages.map((msg, i) => {
             return (
               <MessageSearchResult
-                tabindex={i + 1}
+                tabIndex={i + 1}
                 key={msg.id}
                 message={msg}
                 groupId={groupId}

@@ -1,7 +1,6 @@
-import { h } from "preact";
+import React, { useEffect, useState } from "react";
 import { http } from "/src/core";
 import { useParams, Navigate } from "react-router-dom";
-import { useEffect, useState } from "preact/hooks";
 
 export default function RandomMessage() {
   const params = useParams();

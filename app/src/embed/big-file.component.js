@@ -1,8 +1,7 @@
-import { h } from "preact";
+import React, { useState, useEffect } from "react";
 import { util } from "/src/core";
 import { FaIcon } from "/src/misc";
 import { useTranslation } from "react-i18next";
-import { useState, useEffect } from "preact/hooks";
 import GLightbox from "glightbox";
 
 export default function BigFile(props) {
@@ -61,7 +60,7 @@ export default function BigFile(props) {
           <video
             draggable="false"
             poster={util.thumbnail(props.file.id, 1280, 720)}
-            class="file-embed img-fluid contained-height video"
+            className={"file-embed img-fluid contained-height video"}
             controls="true"
             src={url}
             id={props.file.id}
@@ -69,12 +68,12 @@ export default function BigFile(props) {
         );
       }
       return (
-        <a class="file-embed file-loading image video-uploaded" id={props.file.id}>
+        <a className={"file-embed file-loading image video-uploaded"} id={props.file.id}>
           <img
-            class="img-fluid video-raw"
+            className={"img-fluid video-raw"}
             src={util.crop(props.file.id, 320, 180)}
           />
-          <div class="video-not-ready">
+          <div className={"video-not-ready"}>
             {t("video_not_ready")}
           </div>
         </a>
@@ -92,10 +91,10 @@ export default function BigFile(props) {
           data-height="100vh"
           onClick={e => openLightbox(e)}
         >
-          <img class="img-fluid" src={util.thumbnail(props.file.id, 210*2, 497*2)} />
+          <img className={"img-fluid"} src={util.thumbnail(props.file.id, 210*2, 497*2)} />
           <div
-            class="remove-button"
-            style={props.file.removed ? "color:red" : ""}
+            className={"remove-button"}
+            style={props.file.removed ? { color: "red" } : undefined}
             onClick={e => props.toggleFile(e)}
           >
             <FaIcon family={"solid"} icon={"times"} />
@@ -116,10 +115,10 @@ export default function BigFile(props) {
             data-type="image"
             onClick={e => openLightbox(e)}
           >
-            <img class="img-fluid" src={util.toApp(filePath)} />
+            <img className={"img-fluid"} src={util.toApp(filePath)} />
             <div
-              class="remove-button"
-              style={props.file.removed ? "color:red" : ""}
+              className={"remove-button"}
+              style={props.file.removed ? { color: "red" } : undefined}
               onClick={e => props.toggleFile(e)}
             >
               <FaIcon family={"solid"} icon={"times"} />
@@ -140,10 +139,10 @@ export default function BigFile(props) {
           id={props.file.id}
           onClick={e => openLightbox(e)}
         >
-          <img class="img-fluid" src={util.thumbnail(props.file.id, 720)} />
+          <img className={"img-fluid"} src={util.thumbnail(props.file.id, 720)} />
           <div
-            class="remove-button"
-            style={props.file.removed ? "color:red" : ""}
+            className={"remove-button"}
+            style={props.file.removed ? { color: "red" } : undefined}
             onClick={e => props.toggleFile(e)}
           >
             <FaIcon family={"solid"} icon={"times"} />
@@ -155,19 +154,19 @@ export default function BigFile(props) {
 
   if (props.file.status == "loading") {
     return (
-      <div class="file-embed file-placeholder" id={props.file.id} />
+      <div className={"file-embed file-placeholder"} id={props.file.id} />
     );
   }
   return (
-    <div class="file-embed file-placeholder" id={props.file.id}>
+    <div className={"file-embed file-placeholder"} id={props.file.id}>
       {props.file["error"] ? (
-        <div class="orange-error">&times;</div>
+        <div className={"orange-error"}>&times;</div>
       ) : (
-        <div class="spinner orange-spinner">
+        <div className={"spinner orange-spinner"}>
           <div /><div /><div /><div /><div />
         </div>
       )}
-      <div class="progress-bar">
+      <div className={"progress-bar"}>
         <div style={{ width: `${props.file.progress}%` }} />
       </div>
     </div>

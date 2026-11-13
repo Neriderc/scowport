@@ -1,5 +1,4 @@
-import { h } from "preact";
-import { useEffect, useRef } from "preact/hooks";
+import React, { useEffect, useRef } from "react";
 import Quill from "quill";
 import "quill/dist/quill.snow.css";
 import { Delta } from "quill";
@@ -83,5 +82,5 @@ export default function QuillEditor(props) {
     };
   }, []);
 
-  return <div class="quill-container" ref={containerRef}></div>;
+  return <div className="quill-container" ref={containerRef}></div>;
 }

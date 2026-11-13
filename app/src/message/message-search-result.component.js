@@ -1,7 +1,6 @@
-import { h } from "preact";
+import React, { useEffect, useState } from "react";
 import { http, util, notifications } from "/src/core";
 import { FaIcon } from "/src/misc";
-import { useEffect, useState } from "preact/hooks";
 import { Link } from "react-router-dom";
 import { parseMessage } from "../quill/quill-common";
 
@@ -129,7 +128,7 @@ export default function MessageSearchResult(props) {
     if (props?.preview) {
       return (
         <div
-          class="card-miniature"
+          className="card-miniature"
           style={
             `background-image: url('${util.crop(props?.preview, 100, 100)}')`
           }
@@ -142,8 +141,8 @@ export default function MessageSearchResult(props) {
     }
     return (
       <div
-        class="card-miniature"
-        style={`background-image: url('${avatar}')`}
+        className="card-miniature"
+        style={{ backgroundImage: `url("${avatar}")` }}
       />
     );
   };
@@ -159,34 +158,34 @@ export default function MessageSearchResult(props) {
 
   return (
     <Link
-      class="d-inline-block seamless-link message-preview unselectable"
+      className="d-inline-block seamless-link message-preview unselectable"
       to={getLink()}
       title={props?.title}
     >
-      <div tabindex={props.tabindex} class="card material-shadow-with-hover">
-        <div class="card-body border-top">
+      <div tabIndex={props.tabIndex} className="card material-shadow-with-hover">
+        <div className="card-body border-top">
           {getMiniature()}
-          <div class="infos">
+          <div className="infos">
             <div
-              class="title"
+              className="title"
               dangerouslySetInnerHTML={displayAuthorName()}
             />
-            <div class="dot">&bull;</div>
+            <div className="dot">&bull;</div>
             <div
-              class="title"
+              className="title"
               title={props?.title || util.humanFullDate(props.message.lastActivityDate)}
               dangerouslySetInnerHTML={displayMessageTitle()}
             />
           </div>
-          <div class="text">
+          <div className="text">
             {props?.message?.data?.text?.trim() && (
               <p
-                class="card-text"
+                className="card-text"
                 dangerouslySetInnerHTML={displayMessageText()}
               />
             )}
           </div>
-          <div class="children">
+          <div className="children">
             {!!props.message.children && (
               <span>
                 {`${props.message.children} `}

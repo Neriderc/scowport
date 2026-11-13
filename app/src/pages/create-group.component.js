@@ -1,4 +1,5 @@
-import { h, Component } from "preact";
+import React, { Component } from "react";
+
 import { http, util } from "/src/core";
 import { withTranslation } from "react-i18next";
 import { Navbar } from "/src/navbar";
@@ -33,16 +34,16 @@ class CreateGroup extends Component {
     return (
       <main>
         <Navbar />
-        <div class="content">
-          <div class="container mt-2">
-            <div class="group-settings">
-              <div class="card">
-                <div class="card-body">
-                  <div class="container-fluid p-1">
-                    <div class="row">
-                      <div class="col-12 col-md-10">
-                        <form id="create_group_form" class="mb-1">
-                          <div class="form-group">
+        <div className="content">
+          <div className="container mt-2">
+            <div className="group-settings">
+              <div className="card">
+                <div className="card-body">
+                  <div className="container-fluid p-1">
+                    <div className="row">
+                      <div className="col-12 col-md-10">
+                        <form id="create_group_form" className="mb-1">
+                          <div className="form-group">
                             <label for="name">{this.props.t("name")}: </label>
                             <input
                               type="text"
@@ -50,13 +51,13 @@ class CreateGroup extends Component {
                               minlength="1"
                               maxlength="128"
                               placeholder={this.props.t("name_input")}
-                              class="form-control"
+                              className="form-control"
                               required
                             />
                           </div>
                           <button
                             onClick={e => this.postNewGroup(e)}
-                            class="btn btn-primary"
+                            className="btn btn-primary"
                           >
                             {this.props.t("create_the_group")}
                           </button>
@@ -70,7 +71,7 @@ class CreateGroup extends Component {
           </div>
         </div>
         {this.state.alertMessage && (
-          <div class="global-alert alert alert-danger">{this.state.alertMessage}</div>
+          <div className="global-alert alert alert-danger">{this.state.alertMessage}</div>
         )}
       </main>
     );

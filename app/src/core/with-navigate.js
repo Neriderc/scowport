@@ -1,4 +1,5 @@
-import { h } from "preact";
+import React from "react";
+
 import { useNavigate } from "react-router-dom";
 
 // useNavigate is a hook and can't be called in class components:

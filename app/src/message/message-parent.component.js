@@ -1,4 +1,4 @@
-import { h } from "preact";
+import React from "react";
 import { router } from "/src/core";
 import Message from "./message.component.js";
 import { Navbar } from "/src/navbar";
@@ -9,9 +9,9 @@ export default function MessageParent(props) {
   return (
     <main>
       <Navbar />
-      <div class="content">
-        <article class="mb-3 justify-content-center d-flex">
-          <div class="container pb-3">
+      <div className="content">
+        <article className="mb-3 justify-content-center d-flex">
+          <div className="container pb-3">
             <Message
               focus={!!router.getParam("focus", router.search)}
               isPublic={false}

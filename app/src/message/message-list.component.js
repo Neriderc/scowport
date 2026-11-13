@@ -1,4 +1,5 @@
-import { h, Component, Fragment } from "preact";
+import React, { Fragment, Component } from "react";
+
 import { http, withNavigate } from "/src/core";
 import { MessagePreview } from "/src/message";
 
@@ -125,7 +126,7 @@ class MessageList extends Component {
         {Array.isArray(this.state.messages) && this.state.messages.slice(0, this.state.loaded).map((msg, i) => {
           return (
             <MessagePreview
-              tabindex={i + 1}
+              tabIndex={i + 1}
               key={msg.id}
               id={msg.id}
               isFeed={this.props.isFeed}

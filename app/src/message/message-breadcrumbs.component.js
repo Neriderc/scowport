@@ -1,7 +1,7 @@
-import { h, Fragment } from "preact";
+import React, { Fragment, useEffect, useState } from "react";
+
 import { http, util } from "/src/core";
 import { Link } from "react-router-dom";
-import { useEffect, useState } from "preact/hooks";
 import { parseMessage } from "../quill/quill-common";
 
 export default function MessageBreadcrumbs(props) {
@@ -62,15 +62,15 @@ export default function MessageBreadcrumbs(props) {
     const stack_truncated = [stack[0], ...stack.slice(Math.min(3, stack.length) * -1).slice(1)];
     const breadcrumbs_truncated = [breadcrumbs[0], ...breadcrumbs.slice(Math.min(3, breadcrumbs.length) * -1).slice(1)];
     return (
-      <div class="message-breadcrumbs">
-        <nav style="--bs-breadcrumb-divider: '>';">
-          <ol class="breadcrumb">
+      <div className="message-breadcrumbs">
+        <nav style={{ "--bs-breadcrumb-divider": "'>'" }}>
+          <ol className="breadcrumb">
             {group && (
-              <li class="breadcrumb-item">
+              <li className="breadcrumb-item">
                 <Link
                   key={group.id}
                   to={`/groups/${group.id}`}
-                  class="no-decoration"
+                  className="no-decoration"
                 >{util.limitLength(group.name || group.id.slice(0, 8), 30)}</Link>
               </li>
             )}
@@ -78,14 +78,14 @@ export default function MessageBreadcrumbs(props) {
               <Fragment key={e}>
                 <Fragment>
                   {i == 1 && stack.length > 3 && (
-                    <li class="breadcrumb-item">...</li>
+                    <li className="breadcrumb-item">...</li>
                   )}
                 </Fragment>
-                <li class="breadcrumb-item">
+                <li className="breadcrumb-item">
                   <Link
                     key={e}
                     to={`/messages/${e}`}
-                    class="no-decoration"
+                    className="no-decoration"
                   >{util.limitLength(breadcrumbs_truncated[i] || e.slice(0, 8), 30)}</Link>
                 </li>
               </Fragment>

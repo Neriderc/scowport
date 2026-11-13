@@ -42,3 +42,4 @@ dev/.env
 /dev/shlink
 /app/dist
 /app/dist
+app/e2e/auth/storageState.json

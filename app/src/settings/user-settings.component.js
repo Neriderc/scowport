@@ -1,8 +1,7 @@
-import { h } from "preact";
+import React, { useEffect, useState } from "react";
+import { useStore } from "@nanostores/react";
 import { lang, router, alert, http, util, storage, me as meCore } from "/src/core";
-import { useStore } from "@nanostores/preact";
 import { $me, updateMe } from "/src/store/me.js";
-import { useEffect, useState } from "preact/hooks";
 import { useTranslation } from "react-i18next";
 import { useNavigate, useLocation } from "react-router-dom";
 import { showConfirm } from "/src/store/confirm-modal.js";
@@ -13,11 +12,11 @@ export default function UserSettings() {
   const me = useStore($me);
   const navigate = useNavigate();
   const location = useLocation();
-  const [apiKey, setApiKey] = useState(null);
+  const [apiKey, setApiKey] = useState("");
   const [alertMessage, setAlertMessage] = useState("");
 
   useEffect(() => {
-    storage.get("apiKey").then(apiKey => setApiKey(apiKey));
+    storage.get("apiKey").then(apiKey => setApiKey(apiKey ?? ""));
     setAlertMessage(t(router.getParam("alert")));
   }, []);
 
@@ -119,14 +118,14 @@ export default function UserSettings() {
 
   if (me && me?.data) {
     return (
-      <div class="user-settings">
-        <div class="card">
-          <div class="identite card-body">
-            <div class="container-fluid p-1">
-              <div class="row">
-                <div class="col-12 col-md-2 text-center">
+      <div className="user-settings">
+        <div className="card">
+          <div className="identite card-body">
+            <div className="container-fluid p-1">
+              <div className="row">
+                <div className="col-12 col-md-2 text-center">
                   <img
-                    class="img-fluid rounded-circle material-shadow avatar"
+                    className="img-fluid rounded-circle material-shadow avatar"
                     src={
                       me.avatar
                         ? util.crop(me.avatar["id"], 100, 100)
@@ -137,57 +136,57 @@ export default function UserSettings() {
                   />
                   <button
                     type="button"
-                    class="btn btn-outline-secondary btn-sm mt-2"
+                    className="btn btn-outline-secondary btn-sm mt-2"
                     onClick={inputAvatar}
                   >
                     <span aria-hidden="true">📷</span>{" "}
                     {t("update_photo")}
                   </button>
                 </div>
-                <div class="col-12 col-md-10">
-                  <form id="settings_form" class="mb-3">
-                    <div class="form-group">
-                      <label for="name">{t("name")}: </label>
+                <div className="col-12 col-md-10">
+                  <form id="settings_form" className="mb-3">
+                    <div className="form-group">
+                      <label htmlFor="name">{t("name")}: </label>
                       <input
                         type="text"
                         name="name"
-                        minlength="1"
-                        maxlength="128"
+                        minLength="1"
+                        maxLength="128"
                         placeholder={t("name_input")}
-                        value={me.name}
-                        class="form-control"
+                        defaultValue={me.name}
+                        className="form-control"
                       />
                     </div>
-                    <div class="form-group">
-                      <label for="email">{t("email")}: </label>
+                    <div className="form-group">
+                      <label htmlFor="email">{t("email")}: </label>
                       <input
                         type="email"
                         name="email"
                         placeholder={t("email_input")}
-                        value={me.login}
-                        class="form-control"
+                        defaultValue={me.login}
+                        className="form-control"
                       />
                     </div>
-                    <div class="form-group">
-                      <label for="password">{t("password")}: </label>
+                    <div className="form-group">
+                      <label htmlFor="password">{t("password")}: </label>
                       <input
                         type="password"
                         name="password"
-                        autocomplete="off"
-                        minlength="8"
-                        maxlength="128"
+                        autoComplete="off"
+                        minLength="8"
+                        maxLength="128"
                         placeholder={t("password_input")}
-                        class="form-control"
+                        className="form-control"
                       />
                     </div>
-                    <div class="form-group">
-                      <label for="notification_emails">
+                    <div className="form-group">
+                      <label htmlFor="notification_emails">
                         {t("notification_emails")}:
                       </label>
                       <select
                         name="notification_emails"
-                        class="form-control"
-                        value={me?.data["notification_emails"] || "immediately"}
+                        className="form-control"
+                        defaultValue={me?.data["notification_emails"] || "immediately"}
                       >
                         <option value="none">{t("none")}</option>
                         <option value="immediately">{t("immediately")}</option>
@@ -197,41 +196,41 @@ export default function UserSettings() {
                         <option value="monthly">{t("monthly")}</option>
                       </select>
                     </div>
-                    <div class="form-group">
-                      <label for="default_group">
+                    <div className="form-group">
+                      <label htmlFor="default_group">
                         {t("default_group")}:
                       </label>
                       <select
                         name="default_group"
-                        class="form-control"
-                        value={me?.data["default_group"]}
+                        className="form-control"
+                        defaultValue={me?.data["default_group"]}
                       >
                         {me.groups?.map(e => (
                           <option key={e.id} value={e.id}>{e.name}</option>
                         ))}
                       </select>
                     </div>
-                    <div class="form-group">
-                      <label for="default_page">
+                    <div className="form-group">
+                      <label htmlFor="default_page">
                         {t("default_page")}:
                       </label>
                       <select
                         name="default_page"
-                        class="form-control"
-                        value={me?.data["default_page"] || "default_group"}
+                        className="form-control"
+                        defaultValue={me?.data["default_page"] || "default_group"}
                       >
                         <option value="feed">{t("feed")}</option>
                         <option value="default_group">{t("default_group")}</option>
                       </select>
                     </div>
-                    <div class="form-group">
-                      <label class="capitalize" for="lang">
+                    <div className="form-group">
+                      <label className="capitalize" htmlFor="lang">
                         {t("lang")}:
                       </label>
                       <select
                         name="lang"
-                        class="form-control"
-                        value={lang.getCurrentLang()}
+                        className="form-control"
+                        defaultValue={lang.getCurrentLang()}
                       >
                         {Object.keys(lang.possibleLang).map(k => (
                           <option key={k} value={k}>{lang.possibleLang[k]}</option>
@@ -240,41 +239,41 @@ export default function UserSettings() {
                     </div>
                     <button
                       onClick={e => updateSettings(e)}
-                      class="btn btn-primary mt-3"
+                      className="btn btn-primary mt-3"
                     >
                       {t("save_changes")}
                     </button>
                   </form>
-                  <details class="advanced-settings mt-4">
-                    <summary class="mb-3">
+                  <details className="advanced-settings mt-4">
+                    <summary className="mb-3">
                       {t("advanced_settings")}
                     </summary>
-                    <form id="api_key_form" class="mb-4">
-                      <div class="form-group">
-                        <label for="apiKey">{t("api_key")}: </label>
+                    <form id="api_key_form" className="mb-4">
+                      <div className="form-group">
+                        <label htmlFor="apiKey">{t("api_key")}: </label>
                         <input
                           type="text"
                           name="apiKey"
                           value={apiKey}
-                          class="form-control font-size-80"
-                          readonly="readonly"
+                          className="form-control font-size-80"
+                          readOnly
                         />
                       </div>
                       <button
-                        class="btn btn-outline-secondary"
+                        className="btn btn-outline-secondary"
                         onClick={resetApiKey}
                       >
                         {t("reset_api_key")}
                       </button>
                     </form>
                     <form id="destroy_form">
-                      <label class="d-block" for="destroy_account">
+                      <label className="d-block" htmlFor="destroy_account">
                         {t("destroy_account_explain")}
                       </label>
                       <button
                         onClick={e => destroyAccount(e)}
                         name="destroy_account"
-                        class="btn btn-danger"
+                        className="btn btn-danger"
                       >
                         {t("destroy_account")}
                       </button>
@@ -286,7 +285,7 @@ export default function UserSettings() {
           </div>
         </div>
         {alertMessage && (
-          <div class="global-alert alert alert-success">{alertMessage}</div>
+          <div className="global-alert alert alert-success">{alertMessage}</div>
         )}
       </div>
     );
