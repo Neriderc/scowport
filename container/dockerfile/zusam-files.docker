@@ -3,5 +3,6 @@ COPY container/config /scowport/config
 COPY container/nginx /etc/nginx
 COPY container/run.sh /usr/local/bin/run.sh
 COPY container/dev_run.sh /usr/local/bin/dev_run.sh
+COPY container/test_run.sh /usr/local/bin/test_run.sh
 COPY translations /scowport/translations
 COPY app/dist /scowport/public
