@@ -26,12 +26,6 @@ export default function Writer(props) {
   const currentFiles = useRef();
   currentFiles.current = files;
 
-  const setForm = (writerForm, files = [], title = "", text = "") => {
-    setFiles(files);
-    Array.from(writerForm.current.getElementsByClassName("title-input")).map(e => e.value = title);
-    editorRef.current.setText(text);
-  };
-
   const updateFile = (id, file) => {
     setFiles(currentFiles.current.map(f => f.id === id ? Object.assign(f, file) : f));
   };
@@ -97,7 +91,7 @@ export default function Writer(props) {
 
   const putMessage = (msg, writerForm) => {
     http.put(`/api/messages/${props.messageId}`, msg).then(res => {
-      setForm(writerForm, [], "", "");
+      setFiles([]);
       setSending(false);
       if (!res) {
         alert.add(t("error_new_message"), "alert-danger");
@@ -145,7 +139,7 @@ export default function Writer(props) {
       } else {
         navigate(`/messages/${res.id}`);
       }
-      setForm(writerForm, [], "", "");
+      setFiles([]);
     }).catch(() => {
       setSending(false);
       alert.add(t("error_new_message"), "alert-danger");

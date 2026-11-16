@@ -8,7 +8,7 @@ import { showConfirm } from "/src/store/confirm-modal.js";
 
 export default function UserSettings() {
 
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const me = useStore($me);
   const navigate = useNavigate();
   const location = useLocation();
@@ -21,6 +21,13 @@ export default function UserSettings() {
   }, []);
 
   const resetApiKey = async (event) => {
+    console.log(i18n.language);
+    console.log(i18n.getResourceBundle(i18n.language, "translation"));
+    console.log("Language:", i18n.language);
+  console.log("Resolved language:", i18n.resolvedLanguage);
+  console.log("Namespaces:", i18n.options.ns);
+  console.log("Default namespace:", i18n.options.defaultNS);
+  console.log("Resource store:", i18n.store.data);
     event.preventDefault();
     if (await showConfirm({
       title: t("are_you_sure"),

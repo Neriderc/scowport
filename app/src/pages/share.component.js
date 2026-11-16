@@ -71,7 +71,7 @@ export default function Share() {
           <div className="container">
             {!parent && me?.groups?.length > 1 && (
               <div className="mb-1">
-                <label className="px-1" for="group_share_choice">
+                <label className="px-1" htmlFor="group_share_choice">
                   {t("group_share_choice")}
                 </label>
                 <select
@@ -89,7 +89,7 @@ export default function Share() {
             )}
             {!!parent && (
               <div className="form-group">
-                <label for="apiKey">
+                <label htmlFor="apiKey">
                   {t("parent_message")}:{" "}
                 </label>
                 <input

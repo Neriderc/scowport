@@ -27,6 +27,7 @@ Scowport is a web app for [Zusam](https://github.com/zusam/zusam). It started as
 - Invite flow completely redone, you can invite users to multiple groups and they can review groups before joining (except the first group when signing up, due to Zusam requirement to always be joining a group on signup). Integrates with Shlink to provide short invite links.
 - Adjustments to signup form to confirm email and enter your preferred name
 - Help icon on navigation bar starts an interactive tutorial
+- Uses React instead of Preact, initially to solve an apparent compatibility problem with the emoji picker, but this also allows for a wider range of components going forward.
 
 ## Install
 

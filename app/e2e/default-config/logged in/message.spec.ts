@@ -30,21 +30,18 @@ test("posting a new message to a group from share page", async ({
   await page.locator(".ql-editor").pressSequentially("Body test");
   await expect(page.locator(".ql-editor")).toContainText("Body test");
 
-  // Upload photo
+  // Upload photo and video
   let [fileChooser] = await Promise.all([
     page.waitForEvent("filechooser"),
-    await page.getByRole("button", { name: "Add photos" }).click(),
+    page.getByRole("button", { name: "Add photos or videos" }).click(),
   ]);
-  await fileChooser.setFiles("e2e/fixtures/media/image.jpg");
-  await expect(page.locator(".img-fluid")).toBeVisible();
 
-  // Upload video
-  [fileChooser] = await Promise.all([
-    page.waitForEvent("filechooser"),
-    await page.getByRole("button", { name: "Add a video" }).click(),
+  await fileChooser.setFiles([
+    "e2e/fixtures/media/image.jpg",
+    "e2e/fixtures/media/video.mp4",
   ]);
-  await fileChooser.setFiles("e2e/fixtures/media/video.mp4");
-  await expect(page.locator("video")).toBeVisible();
+
+  await expect(page.locator(".file-grid .miniature")).toHaveCount(2);
 
   // Upload pdf
   [fileChooser] = await Promise.all([
@@ -53,7 +50,7 @@ test("posting a new message to a group from share page", async ({
   ]);
 
   await fileChooser.setFiles("e2e/fixtures/media/pdf.pdf");
-  await expect(page.locator(".pdf-outline")).toBeVisible();
+  await expect(page.locator(".file-grid .miniature")).toHaveCount(3);
 
   await page.getByRole("button", { name: /Submit/i }).click();
   await expect(page).toHaveURL(/\/messages\/.*/);
@@ -69,13 +66,9 @@ test("posting a new message to a group from share page", async ({
   );
   await expect(page.locator(".ql-editor h1")).toHaveText("Body test");
 
-  // Video file may render as <video> (status "ready") or as a placeholder
-  // <a class="video-uploaded"> (status "raw", pending server-side transcoding).
-  // Both states confirm the video was attached to the message.
-  const files = page.locator(".file-grid").first();
-  await expect(files.locator("video, .video-uploaded")).toHaveCount(1);
-  await expect(files.locator("a.pdf-outline")).toHaveCount(1);
-  await expect(files.locator("a.image:not(.pdf-outline)")).toHaveCount(1);
+  // Gallery mode because I changed it to usse gallery from 2 items onward.
+  // This is different to zusam's 4 so selectors are different
+  await expect(page.locator(".file-grid .miniature")).toHaveCount(3);
 });
 
 // Basic test that message works starting from a group

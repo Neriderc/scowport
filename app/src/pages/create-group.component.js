@@ -44,7 +44,7 @@ class CreateGroup extends Component {
                       <div className="col-12 col-md-10">
                         <form id="create_group_form" className="mb-1">
                           <div className="form-group">
-                            <label for="name">{this.props.t("name")}: </label>
+                            <label htmlFor="name">{this.props.t("name")}: </label>
                             <input
                               type="text"
                               name="name"

@@ -225,7 +225,7 @@ export default function Invite() {
                     
                     {inviteUrl && (
                       <div className="mt-4">
-                        <label for="invite-key-box" className="form-label fw-semibold">
+                        <label htmlFor="invite-key-box" className="form-label fw-semibold">
                           {t("share_invite_link")}
                         </label>
 

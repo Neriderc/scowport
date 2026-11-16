@@ -181,9 +181,7 @@ export default function MiniFile(props) {
         >
           <div
             className={`miniature${props.file.removed ? " removed" : ""}`}
-            style={
-              `background-image:url("${util.crop(props.file.id, 160, 160)}")`
-            }
+            style={{ backgroundImage: `url("${util.crop(props.file.id, 160, 160)}")` }}
           />
           <div
             className="remove-button"
@@ -209,9 +207,7 @@ export default function MiniFile(props) {
         >
           <div
             className={`miniature${props.file.removed ? " removed" : ""}`}
-            style={
-              `background-image:url("${util.crop(props.file.id, 160, 160)}")`
-            }
+            style={{ backgroundImage: `url("${util.crop(props.file.id, 160, 160)}")` }}
           />
           <div
             className="remove-button"
@@ -239,9 +235,7 @@ export default function MiniFile(props) {
         >
           <div
             className={`miniature${props.file.removed ? " removed" : ""}`}
-            style={
-              `background-image:url("${util.crop(props.file.id, 160, 160)}")`
-            }
+            style={{ backgroundImage: `url("${util.crop(props.file.id, 160, 160)}")` }}
           />
           <div
             className="remove-button"
