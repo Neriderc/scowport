@@ -325,38 +325,36 @@ test.describe("Test group settings", () => {
 
   test("leaving a group", async ({ authRequest, page }) => {
     const group = await addGroup(authRequest, { name: "New group" });
-    await page.goto("/groups/" + group.id + "/settings");
 
-    // Wait for the group data API call to complete and the component to re-render.
-    // Without this, the leaveGroup closure captures the initial group = {} state,
-    // causing "Cannot read properties of undefined (reading 'length')" on group.users.
+    await page.goto(`/groups/${group.id}/settings`);
+
+    // Wait for group data to load before attempting to leave.
     await expect(page.locator("input[name='name']")).toHaveValue("New group");
 
     await page.getByRole("button", { name: "Leave the group" }).click();
 
-    // Use native element.click() to avoid backdrop pointer-event interception
-    // that occurs in the Docker container environment.
     const confirmBtn = page.locator(".modal-footer .btn-danger");
     await expect(confirmBtn).toBeVisible();
+
+    // Native click avoids backdrop pointer-event interception in Docker.
     await confirmBtn.evaluate((el) => el.click());
 
-    // A second "Delete group" modal only appears if we're the last member.
-    // If the group has more than 1 user, leave() proceeds immediately.
+    // If we're the last member, a second confirmation is required to delete the group.
+    // Otherwise, leaving proceeds immediately.
     const deleteBtn = page.locator(".modal-footer .btn-danger");
-    try {
-      await expect(deleteBtn).toBeVisible({ timeout: 5000 });
+
+    if (await deleteBtn.isVisible({ timeout: 2000 }).catch(() => false)) {
       await deleteBtn.evaluate((el) => el.click());
-    } catch {
-      // Second modal didn't appear - leave() was called directly
     }
 
     await expect(page.locator(".global-alert")).toHaveText(
       "You left the group.",
     );
 
-    await page.goto("/groups/" + group.id + "/settings");
+    await page.goto(`/groups/${group.id}/settings`);
+
     const me = await getMe(authRequest);
-    await expect(page).toHaveURL("/groups/" + me.data.default_group);
+    await expect(page).toHaveURL(`/groups/${me.data.default_group}`);
   });
 });
 

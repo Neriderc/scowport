@@ -92,38 +92,69 @@ define RUN_PLAYWRIGHT_CONTAINER
 	set -eu; \
 	export SHLINK_API_KEY="$$(openssl rand -hex 32)"; \
 	export SHLINK_DB_PASSWORD="$$(openssl rand -hex 32)"; \
-	docker network inspect playwright-network >/dev/null 2>&1 || docker network create playwright-network; \
-	trap 'cd "$(CURDIR)/test" && $(CONTAINER_PGRM) compose -f compose-$(1).yaml down || true; docker network rm playwright-network || true' EXIT; \
-	cd test && $(CONTAINER_PGRM) compose -f compose-$(1).yaml up -d; \
+	\
+	docker network inspect playwright-network >/dev/null 2>&1 || \
+		docker network create playwright-network; \
+	\
+	trap ' \
+		cd "$(CURDIR)/test" && \
+		$(CONTAINER_PGRM) compose -f compose-$(1).yaml down -v || true; \
+		docker network rm playwright-network || true \
+	' EXIT; \
+	\
+	cd test && \
+		$(CONTAINER_PGRM) compose -f compose-$(1).yaml up -d; \
+	\
+	# Zusam's config setup won't allow us to feed in config without a volume, so we insert it once the container starts
+	if [ "$(1)" = "nondefault" ]; then \
+		$(CONTAINER_PGRM) compose -f compose-$(1).yaml exec -T zusam sh -lc '\
+			sed -i \
+				-e "s/^ALLOW_MESSAGE_REACTIONS=.*/ALLOW_MESSAGE_REACTIONS=\"true\"/" \
+				-e "s/^ALLOW_EMAIL=.*/ALLOW_EMAIL=\"true\"/" \
+				-e "s/^ALLOW_IMAGE_UPLOAD=.*/ALLOW_IMAGE_UPLOAD=\"false\"/" \
+				-e "s/^ALLOW_PUBLIC_LINKS=.*/ALLOW_PUBLIC_LINKS=\"false\"/" \
+				-e "s/^ALLOW_VIDEO_UPLOAD=.*/ALLOW_VIDEO_UPLOAD=\"false\"/" \
+				-e "s/^LANG=.*/LANG=\"fr_FR\"/" \
+				/zusam/data/config \
+		'; \
+		$(CONTAINER_PGRM) compose -f compose-$(1).yaml restart zusam; \
+	fi; \
+	\
 	until curl -s http://localhost:8532 > /dev/null; do \
 		echo "Waiting for app..."; \
 		sleep 5; \
 	done; \
+	\
 	docker run -it --rm \
 		--network playwright-network \
 		--ipc=host \
 		-p 9323:8080 \
-		-v "$(CURDIR)/app:/app" -w /app \
+		-v "$(CURDIR)/app:/app" \
+		-w /app \
 		-e PLAYWRIGHT_HTML_OPEN=never \
 		-e PLAYWRIGHT_BASE_URL=http://scowport-test:8080 \
 		mcr.microsoft.com/playwright:v1.65.0-noble \
-		npx playwright test e2e/$(1)-config --workers $(PLAYWRIGHT_WORKERS) $(2)
+		npx playwright test e2e/$(1)-config \
+			--workers $(PLAYWRIGHT_WORKERS) $(2)
 endef
 
 playwright-default-ci:
-	$(call RUN_PLAYWRIGHT,default)
+	$(call RUN_PLAYWRIGHT_CONTAINER,default)
 
 playwright-nondefault-ci:
-	$(call RUN_PLAYWRIGHT,nondefault)
+	$(call RUN_PLAYWRIGHT_CONTAINER,nondefault)
 
 playwright:
 	make test
 	$(call RUN_PLAYWRIGHT_CONTAINER,default)
 	$(call RUN_PLAYWRIGHT_CONTAINER,nondefault)
 
-playwright-ui:
+playwright-ui-default:
 	make test
 	$(call RUN_PLAYWRIGHT_CONTAINER,default,--ui --ui-host 0.0.0.0 --ui-port 8080)
+
+playwright-ui-nondefault:
+	make test
 	$(call RUN_PLAYWRIGHT_CONTAINER,nondefault,--ui --ui-host 0.0.0.0 --ui-port 8080)
 	
 .PHONY: nothing $(TARGETS) lint-local lint-api lint-app lint-integ-tests compile-webapp-local clean unit-tests-local

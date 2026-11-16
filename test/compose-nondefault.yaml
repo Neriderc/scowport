@@ -4,18 +4,61 @@ services:
       - UID=${UID:-1000}
       - GID=${GID:-1000}
       - APP_ENV=dev
-      - ALLOW_EMAIL=true
-      - ALLOW_IMAGE_UPLOAD=false
-      - ALLOW_MESSAGE_REACTIONS=true
-      - ALLOW_PUBLIC_LINKS=false
-      - ALLOW_VIDEO_UPLOAD=false
-      - LANG="fr_FR"
     image: zusam
     container_name: zusam-test
-    ports:
-      - "8532:8080"
     networks:
       - playwright-network
+
+  scowport:
+    ports:
+      - '8532:8080'
+    container_name: scowport-test
+    environment:
+      - ZUSAM_API_URL=http://zusam:8080
+      - SHLINK_API_URL=http://shlink_test:8080/i
+      - SHLINK_API_KEY=${SHLINK_API_KEY}
+      - INVITE_APP_ORIGIN=http://localhost:8532
+    image: scowport-test
+    networks:
+      - playwright-network
+
+  shlink:
+    container_name: shlink_test
+    environment:
+      - DEFAULT_DOMAIN=localhost:8532
+      - BASE_PATH=/i
+      - IS_HTTPS_ENABLED=false
+      - TZ="Pacific/Auckland"
+      - INITIAL_API_KEY=${SHLINK_API_KEY}
+      - DB_DRIVER=postgres
+      - DB_USER=shlink
+      - DB_NAME=shlink
+      - DB_PASSWORD=${SHLINK_DB_PASSWORD}
+      - DB_HOST=shlink_db_postgres_test
+    image: shlinkio/shlink:stable
+    networks:
+      - playwright-network
+    depends_on:
+      shlink_db_postgres:
+        condition: service_healthy
+
+  shlink_db_postgres:
+    container_name: shlink_db_postgres_test
+    image: postgres:16.3-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: shlink
+      POSTGRES_PASSWORD: "${SHLINK_DB_PASSWORD}"
+      POSTGRES_DB: shlink
+      PGDATA: /var/lib/postgresql/data/pgdata
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U shlink -d shlink"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+    networks:
+      - playwright-network
+
 networks:
   playwright-network:
     external: true
